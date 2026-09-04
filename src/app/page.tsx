@@ -60,9 +60,14 @@ export default async function HomePage() {
             <Link className="btn" href="#blog">
               Browse the blog
             </Link>
-            <Link className="btn btn-secondary" href="#features">
-              See what EXPal does
-            </Link>
+            <a
+              className="btn btn-secondary"
+              href={SITE.appUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Join EXPal
+            </a>
           </div>
           <div className="pills" aria-label="Product highlights">
             <span className="pill">Housing</span>
@@ -111,11 +116,14 @@ export default async function HomePage() {
             <Link className="btn" href="/blog">
               Open the journal
             </Link>
-            {SITE.appUrl ? (
-              <a className="btn btn-secondary" href={SITE.appUrl}>
-                Open the app
-              </a>
-            ) : null}
+            <a
+              className="btn btn-secondary"
+              href={SITE.appUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Join the app
+            </a>
           </div>
         </div>
       </section>

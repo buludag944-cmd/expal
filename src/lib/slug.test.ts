@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { excerptFrom, readingTime, slugify, uniqueSlug } from "./slug";
 import { parseSession, verifyPassword } from "./auth";
+import { PRODUCTION_SITE_URL } from "./site";
 
 describe("slugify", () => {
   it("builds SEO-friendly slugs", () => {
@@ -31,6 +32,12 @@ describe("reading helpers", () => {
 
   it("builds an excerpt without markdown noise", () => {
     expect(excerptFrom("## Hello **Dublin**", 80)).toContain("Hello");
+  });
+});
+
+describe("production site", () => {
+  it("points canonical URLs at the Netlify app", () => {
+    expect(PRODUCTION_SITE_URL).toBe("https://expalapp.netlify.app");
   });
 });
 

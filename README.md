@@ -2,7 +2,9 @@
 
 Public website for **EXPal** — your friend away from home.
 
-This is the web landing page. Anyone can open it and read the journal **without logging in**. That is what helps search engines send people here.
+Live app: [https://expalapp.netlify.app](https://expalapp.netlify.app)
+
+Anyone can open this landing page and read the journal **without logging in**. Join EXPal when you want housing, messages, or referrals.
 
 App id: `com.yourbrandexpal`
 
@@ -11,6 +13,7 @@ App id: `com.yourbrandexpal`
 - Public landing page with a blog section
 - Individual article URLs with titles, descriptions, sitemap, RSS, and Open Graph
 - Writer desk at `/admin` so you can publish new posts yourself
+- Join / Open app buttons that go to [expalapp.netlify.app](https://expalapp.netlify.app)
 
 ## Run locally
 
@@ -20,7 +23,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The landing page and `/blog` do not ask for an account.
+Open [http://localhost:3000](http://localhost:3000). The landing page and `/blog` do not ask for an account. **Join EXPal** opens the live app.
 
 ### Publish a post
 
@@ -35,11 +38,15 @@ Posts are stored in `data/posts.json`. After you publish locally, commit that fi
 
 | Variable | Purpose |
 | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | Canonical site URL for sitemap and social cards |
-| `NEXT_PUBLIC_APP_URL` | Optional link to the signed-in EXPal app |
+| `NEXT_PUBLIC_SITE_URL` | Canonical site URL. Production: `https://expalapp.netlify.app` |
+| `NEXT_PUBLIC_APP_URL` | Join / Open app. Production: `https://expalapp.netlify.app` |
 | `NEXT_PUBLIC_APP_ID` | `com.yourbrandexpal` |
 | `ADMIN_PASSWORD` | Password for `/admin` |
 | `ADMIN_SECRET` | Optional extra secret for the admin cookie |
+
+## Deploy on Netlify
+
+This repo includes `netlify.toml` pointed at `expalapp.netlify.app`. Set `ADMIN_PASSWORD` as a Netlify environment variable (not in git).
 
 ## SEO
 

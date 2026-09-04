@@ -39,6 +39,8 @@ export function websiteJsonLd() {
       "@type": "Organization",
       name: SITE.name,
       identifier: SITE.appId,
+      url: SITE.appUrl,
+      sameAs: [SITE.appUrl],
     },
     potentialAction: {
       "@type": "SearchAction",

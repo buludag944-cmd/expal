@@ -16,8 +16,13 @@ export default function Footer() {
           <Link href="/blog">Blog</Link>
           <Link href="/#features">Features</Link>
           <Link href="/admin">Write a post</Link>
+          <a href={SITE.appUrl} target="_blank" rel="noopener noreferrer">
+            Join EXPal
+          </a>
         </div>
-        <p className="muted app-id">App id {SITE.appId}</p>
+        <p className="muted app-id">
+          {SITE.appId} · {SITE.appUrl.replace(/^https?:\/\//, "")}
+        </p>
       </div>
     </footer>
   );

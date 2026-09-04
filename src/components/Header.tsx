@@ -27,11 +27,9 @@ export default function Header() {
             Blog
           </Link>
           <Link href="/blog">Guides</Link>
-          {SITE.appUrl ? (
-            <a className="btn btn-ghost" href={SITE.appUrl}>
-              Open app
-            </a>
-          ) : null}
+          <a className="btn btn-ghost" href={SITE.appUrl} target="_blank" rel="noopener noreferrer">
+            Join EXPal
+          </a>
           {onAdmin ? (
             <Link className="btn" href="/admin">
               Writer
