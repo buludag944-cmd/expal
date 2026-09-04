@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["com.yourbrandexpal"],
+        "components": [
+          { "/": "/blog*" },
+          { "/": "/" }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["com.yourbrandexpal"]
+  }
+}
