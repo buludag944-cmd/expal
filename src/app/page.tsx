@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import BlogSection from "@/components/BlogSection";
+import LandingAuth from "@/components/LandingAuth";
 import JsonLd from "@/components/JsonLd";
 import { listPosts } from "@/lib/posts";
 import { websiteJsonLd } from "@/lib/seo";
@@ -60,14 +61,9 @@ export default async function HomePage() {
             <Link className="btn" href="#blog">
               Browse the blog
             </Link>
-            <a
-              className="btn btn-secondary"
-              href={SITE.appUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Join EXPal
-            </a>
+            <Link className="btn btn-secondary" href="/signup">
+              Set up account
+            </Link>
           </div>
           <div className="pills" aria-label="Product highlights">
             <span className="pill">Housing</span>
@@ -100,6 +96,8 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <LandingAuth />
+
       <BlogSection posts={posts} />
 
       <section className="cta-band">
@@ -116,14 +114,9 @@ export default async function HomePage() {
             <Link className="btn" href="/blog">
               Open the journal
             </Link>
-            <a
-              className="btn btn-secondary"
-              href={SITE.appUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Join the app
-            </a>
+            <Link className="btn btn-secondary" href="/login">
+              Log in with Google
+            </Link>
           </div>
         </div>
       </section>

@@ -2,10 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/components/AuthProvider";
+import { displayName } from "@/lib/api";
 import { SITE } from "@/lib/site";
 
 export default function Header() {
   const pathname = usePathname();
+  const { user, ready, logout } = useAuth();
   const onAdmin = pathname.startsWith("/admin");
 
   return (
@@ -27,18 +30,33 @@ export default function Header() {
             Blog
           </Link>
           <Link href="/blog">Guides</Link>
-          <a className="btn btn-ghost" href={SITE.appUrl} target="_blank" rel="noopener noreferrer">
-            Join EXPal
-          </a>
+          {ready && user ? (
+            <>
+              <Link href="/account" className={pathname === "/account" ? "active" : ""}>
+                {displayName(user).split(" ")[0] || "Account"}
+              </Link>
+              <button type="button" className="btn btn-ghost" onClick={logout}>
+                Sign out
+              </button>
+              <Link className="btn" href={user.onboardingComplete ? "/account" : "/setup"}>
+                {user.onboardingComplete ? "Open account" : "Finish setup"}
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link className="btn btn-ghost" href="/login">
+                Log in
+              </Link>
+              <Link className="btn" href="/signup">
+                Sign up
+              </Link>
+            </>
+          )}
           {onAdmin ? (
-            <Link className="btn" href="/admin">
+            <Link className="btn btn-secondary" href="/admin">
               Writer
             </Link>
-          ) : (
-            <Link className="btn" href="/#blog">
-              Read stories
-            </Link>
-          )}
+          ) : null}
         </nav>
       </div>
     </header>

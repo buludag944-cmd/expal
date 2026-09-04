@@ -4,16 +4,17 @@ Public website for **EXPal** — your friend away from home.
 
 Live app: [https://expalapp.netlify.app](https://expalapp.netlify.app)
 
-Anyone can open this landing page and read the journal **without logging in**. Join EXPal when you want housing, messages, or referrals.
+Anyone can open this landing page and read the journal **without logging in**. Sign up or log in with Google when you want an account.
 
 App id: `com.yourbrandexpal`
 
 ## What you get
 
 - Public landing page with a blog section
+- **Sign up / set up account** and **Log in with Google** (Firebase Gmail — same project as the EXPal app)
+- Account setup after the first Google sign-in
 - Individual article URLs with titles, descriptions, sitemap, RSS, and Open Graph
 - Writer desk at `/admin` so you can publish new posts yourself
-- Join / Open app buttons that go to [expalapp.netlify.app](https://expalapp.netlify.app)
 
 ## Run locally
 
@@ -23,7 +24,14 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The landing page and `/blog` do not ask for an account. **Join EXPal** opens the live app.
+Open [http://localhost:3000](http://localhost:3000). The landing page and `/blog` do not ask for an account. **Sign up** and **Log in** use Firebase Google sign-in.
+
+### Create or open an account
+
+1. Open `/signup` (new) or `/login` (returning)
+2. Choose **Set up account with Google** or **Log in with Google**
+3. New accounts continue to `/setup` to finish profile details
+4. Then open the full web app at [expalapp.netlify.app](https://expalapp.netlify.app) with the same Gmail
 
 ### Publish a post
 
@@ -39,10 +47,14 @@ Posts are stored in `data/posts.json`. After you publish locally, commit that fi
 | Variable | Purpose |
 | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Canonical site URL. Production: `https://expalapp.netlify.app` |
-| `NEXT_PUBLIC_APP_URL` | Join / Open app. Production: `https://expalapp.netlify.app` |
+| `NEXT_PUBLIC_APP_URL` | Full web app. Production: `https://expalapp.netlify.app` |
+| `NEXT_PUBLIC_API_URL` | Backend for Google account create / login |
+| `NEXT_PUBLIC_FIREBASE_*` | Firebase web config (`expalapp-a6422`) |
 | `NEXT_PUBLIC_APP_ID` | `com.yourbrandexpal` |
 | `ADMIN_PASSWORD` | Password for `/admin` |
 | `ADMIN_SECRET` | Optional extra secret for the admin cookie |
+
+If you host this site on a new domain, add that domain in Firebase → Authentication → Settings → Authorized domains.
 
 ## Deploy on Netlify
 

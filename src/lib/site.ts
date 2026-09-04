@@ -16,6 +16,10 @@ export const SITE = {
   ),
   appId: process.env.NEXT_PUBLIC_APP_ID || "com.yourbrandexpal",
   author: "EXPal editorial",
+  apiUrl: (process.env.NEXT_PUBLIC_API_URL || "https://expalapp-1.onrender.com").replace(
+    /\/$/,
+    "",
+  ),
 };
 
 export function absoluteUrl(path = "/"): string {

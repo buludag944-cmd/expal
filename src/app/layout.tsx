@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Sora } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Providers from "@/components/Providers";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
@@ -67,9 +68,11 @@ export default function RootLayout({
   return (
     <html lang="en-IE">
       <body className={`${sora.variable} ${dmSans.variable} antialiased`}>
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <Providers>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
