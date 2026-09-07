@@ -11,6 +11,8 @@ App id: `com.yourbrandexpal`
 ## What you get
 
 - Public landing page with a blog section
+- **Mobile app** at `/app` (Home, Explore, Community, Journey visa tracker, Profile)
+- Product walkthrough at `/demo`
 - **Sign up / set up account** and **Log in with Google** (Firebase Gmail — same project as the EXPal app)
 - Account setup after the first Google sign-in
 - Individual article URLs with titles, descriptions, sitemap, RSS, and Open Graph

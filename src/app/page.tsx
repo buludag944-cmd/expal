@@ -58,8 +58,8 @@ export default async function HomePage() {
             create an account.
           </p>
           <div className="hero-actions">
-            <Link className="btn" href="#blog">
-              Browse the blog
+            <Link className="btn" href="/demo">
+              See the mobile app
             </Link>
             <Link className="btn btn-secondary" href="/signup">
               Set up account
@@ -111,8 +111,8 @@ export default async function HomePage() {
             you want housing listings, messages, or referrals.
           </p>
           <div className="hero-actions" style={{ marginTop: "1.25rem" }}>
-            <Link className="btn" href="/blog">
-              Open the journal
+            <Link className="btn" href="/app">
+              Open the mobile app
             </Link>
             <Link className="btn btn-secondary" href="/login">
               Log in with Google

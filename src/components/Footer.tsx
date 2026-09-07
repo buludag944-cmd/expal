@@ -1,7 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { SITE } from "@/lib/site";
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname.startsWith("/app") || pathname.startsWith("/demo")) return null;
+
   return (
     <footer className="site-footer">
       <div className="site-wrap footer-inner">
@@ -17,6 +23,7 @@ export default function Footer() {
           <Link href="/#features">Features</Link>
           <Link href="/login">Log in</Link>
           <Link href="/signup">Sign up</Link>
+          <Link href="/app">Mobile app</Link>
           <Link href="/admin">Write a post</Link>
         </div>
         <p className="muted app-id">

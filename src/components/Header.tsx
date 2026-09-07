@@ -10,6 +10,7 @@ export default function Header() {
   const pathname = usePathname();
   const { user, ready, logout } = useAuth();
   const onAdmin = pathname.startsWith("/admin");
+  if (pathname.startsWith("/app") || pathname.startsWith("/demo")) return null;
 
   return (
     <header className="site-header">
@@ -30,6 +31,9 @@ export default function Header() {
             Blog
           </Link>
           <Link href="/blog">Guides</Link>
+          <Link href="/app" className={pathname.startsWith("/app") || pathname.startsWith("/demo") ? "active" : ""}>
+            App
+          </Link>
           {ready && user ? (
             <>
               <Link href="/account" className={pathname === "/account" ? "active" : ""}>
