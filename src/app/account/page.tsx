@@ -40,9 +40,9 @@ export default function AccountPage() {
         </div>
         <div className="admin-card" style={{ padding: "1.4rem" }}>
           <p>
-            <strong>Email</strong>
+            <strong>Signed in</strong>
             <br />
-            {user.email}
+            Google account connected
           </p>
           {user.destinationCity ? (
             <p>

@@ -21,7 +21,7 @@ export default function LandingAuth() {
         </div>
         {user ? (
           <div className="auth-card">
-            <p className="ok">Signed in as {user.email}</p>
+            <p className="ok">Signed in with Google</p>
             <Link className="btn" href={user.onboardingComplete ? "/account" : "/setup"}>
               {user.onboardingComplete ? "Open your account" : "Finish account setup"}
             </Link>

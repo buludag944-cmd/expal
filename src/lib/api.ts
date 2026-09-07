@@ -23,5 +23,5 @@ export function nextPathAfterAuth(user: Pick<ExpalUser, "onboardingComplete">): 
 
 export function displayName(user: ExpalUser | null): string {
   if (!user) return "";
-  return [user.firstName, user.lastName].filter(Boolean).join(" ").trim() || user.email || "there";
+  return [user.firstName, user.lastName].filter(Boolean).join(" ").trim() || "there";
 }

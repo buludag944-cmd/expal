@@ -16,6 +16,12 @@ describe("displayName", () => {
   it("joins first and last name", () => {
     expect(displayName({ id: 1, firstName: "Bahar", lastName: "U" })).toBe("Bahar U");
   });
+
+  it("does not use an email as the public profile name", () => {
+    expect(
+      displayName({ id: 1, email: "b.uludag944@gmail.com" }),
+    ).toBe("there");
+  });
 });
 
 describe("google errors", () => {

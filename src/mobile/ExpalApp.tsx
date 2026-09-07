@@ -862,12 +862,37 @@ function OverlayScreen({
         </div>
       ) : overlay === "edit-profile" ? (
         <div className="detail-body">
-          <p>
-            {USER.firstName} {USER.lastName}
+          <p className="muted" style={{ marginBottom: 12 }}>
+            Your public profile uses your city, not an email address.
           </p>
-          <p className="muted">
-            {USER.city} · {USER.permit} · {USER.job}
-          </p>
+          <div className="row-list">
+            <div className="row" style={{ cursor: "default" }}>
+              <span className="row-copy">
+                <p className="sub">Name</p>
+                <span className="title">
+                  {USER.firstName} {USER.lastName}
+                </span>
+              </span>
+            </div>
+            <div className="row" style={{ cursor: "default" }}>
+              <span className="row-copy">
+                <p className="sub">Location</p>
+                <span className="title">📍 {USER.city}</span>
+              </span>
+            </div>
+            <div className="row" style={{ cursor: "default" }}>
+              <span className="row-copy">
+                <p className="sub">Permit</p>
+                <span className="title">{USER.permit}</span>
+              </span>
+            </div>
+            <div className="row" style={{ cursor: "default" }}>
+              <span className="row-copy">
+                <p className="sub">Work</p>
+                <span className="title">{USER.job}</span>
+              </span>
+            </div>
+          </div>
         </div>
       ) : overlay === "privacy" ? (
         <div className="detail-body">

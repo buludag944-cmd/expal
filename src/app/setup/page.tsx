@@ -77,7 +77,7 @@ export default function SetupPage() {
           <p className="eyebrow">Almost there</p>
           <h1 className="page-title">Set up your account</h1>
           <p className="lede">
-            Signed in as {user.email}. A few details personalise visa guidance in{" "}
+            Signed in with Google. A few details personalise visa guidance in{" "}
             {SITE.name}. You can change them later in the app.
           </p>
         </div>

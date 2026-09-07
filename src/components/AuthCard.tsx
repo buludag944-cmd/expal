@@ -25,7 +25,7 @@ export default function AuthCard({ mode }: Props) {
       </p>
       {user ? (
         <p className="ok">
-          You are signed in as {user.email}.{" "}
+          You are signed in with Google.{" "}
           <Link href={user.onboardingComplete ? "/account" : "/setup"}>
             Continue
           </Link>
