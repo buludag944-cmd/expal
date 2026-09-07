@@ -862,9 +862,6 @@ function OverlayScreen({
         </div>
       ) : overlay === "edit-profile" ? (
         <div className="detail-body">
-          <p className="muted" style={{ marginBottom: 12 }}>
-            Your public profile uses your city, not an email address.
-          </p>
           <div className="row-list">
             <div className="row" style={{ cursor: "default" }}>
               <span className="row-copy">
