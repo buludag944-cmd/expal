@@ -13,7 +13,7 @@ import { chromium } from "playwright-core";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const WIDTH = 1080;
 const HEIGHT = 1350;
-const DURATION_MS = 36_000;
+const DURATION_MS = 56_000;
 const BASE = process.env.AD_BASE_URL || "http://127.0.0.1:3000";
 const OUT_DIR = process.env.LM_OUT_DIR || "/tmp/expal-linkedin-ad";
 const ARTIFACTS = process.env.AD_ARTIFACTS_DIR || "/opt/cursor/artifacts";
@@ -24,41 +24,50 @@ const BEATS = [
     id: "hook",
     startMs: 0,
     kind: "hook",
-    voice: "Moving to Ireland? Your friend away from home.",
+    voice:
+      "Moving to a new country shouldn’t mean twenty-five open tabs and endless unanswered questions.",
+  },
+  {
+    id: "meet",
+    startMs: 7_200,
+    kind: "hook",
+    voice: "Meet EXPal — built to make moving to and settling in Ireland simpler.",
   },
   {
     id: "home",
-    startMs: 4_000,
+    startMs: 13_200,
     kind: "phone",
-    caption: "Home",
-    voice: "Home.",
+    caption: "Find practical guidance on PPS, IRP,\\Nhousing, banking and employment rights.",
+    voice: "Find practical guidance on PPS, IRP, housing, banking and employment rights.",
   },
   {
     id: "explore",
-    startMs: 10_000,
+    startMs: 21_800,
     kind: "phone",
-    caption: "Explore",
-    voice: "Explore.",
+    caption:
+      "Connect directly with other expats, ask questions,\\Nbuild your network, and even request career referrals from people willing to help.",
+    voice:
+      "Connect directly with other expats, ask questions, build your network, and even request career referrals from people willing to help.",
   },
   {
     id: "journey",
-    startMs: 16_000,
+    startMs: 32_400,
     kind: "phone",
-    caption: "Journey",
-    voice: "Journey.",
+    caption: "Soon, you’ll also be able to track\\Nimportant document and IRP renewal dates.",
+    voice: "Soon, you’ll also be able to track important document and IRP renewal dates.",
   },
   {
     id: "profile",
-    startMs: 22_000,
+    startMs: 39_600,
     kind: "phone",
-    caption: "Profile",
-    voice: "Profile.",
+    caption: "No ads. No noise.\\NJust guidance, connection and community.",
+    voice: "No ads. No noise. Just guidance, connection and community.",
   },
   {
     id: "cta",
-    startMs: 28_000,
+    startMs: 48_400,
     kind: "cta",
-    voice: "Download EXPal free on the App Store and Google Play.",
+    voice: "EXPal. Move. Settle. Connect.",
   },
 ];
 
@@ -210,7 +219,7 @@ async function writeAss() {
   const phones = BEATS.filter((beat) => beat.kind === "phone");
   const events = phones
     .map((beat, index, list) => {
-      const end = list[index + 1]?.startMs ?? 28_000;
+      const end = list[index + 1]?.startMs ?? 48_400;
       return `Dialogue: 0,${assTimestamp(beat.startMs + 80)},${assTimestamp(end)},Default,,0,0,0,,${beat.caption}`;
     })
     .join("\n");
@@ -226,7 +235,7 @@ ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Default,Liberation Sans,56,&H00FFFFFF,&H000000FF,&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,5,2,2,40,40,54,1
+Style: Default,Liberation Sans,34,&H00FFFFFF,&H000000FF,&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,4,2,2,48,48,48,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -302,7 +311,7 @@ async function transcode(rawVideo, narration, assFile) {
     "-i",
     rawVideo,
     "-t",
-    "36.00",
+    "56.00",
     "-vf",
     `scale=1080:1350:force_original_aspect_ratio=decrease,pad=1080:1350:(ow-iw)/2:(oh-ih)/2,fps=30,subtitles=${assPath},format=yuv420p`,
     "-c:v",
@@ -332,7 +341,7 @@ async function transcode(rawVideo, narration, assFile) {
       "-i",
       narration,
       "-filter_complex",
-      "[1:a]aresample=44100,aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,loudnorm=I=-14:TP=-1.5:LRA=11,afade=t=in:st=0:d=0.1,afade=t=out:st=35.2:d=0.6[a]",
+      "[1:a]aresample=44100,aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,loudnorm=I=-14:TP=-1.5:LRA=11,afade=t=in:st=0:d=0.1,afade=t=out:st=55.2:d=0.6[a]",
       "-map",
       "0:v",
       "-map",
@@ -360,14 +369,14 @@ async function transcode(rawVideo, narration, assFile) {
 
 async function copyArtifacts(finalPath, silent) {
   await mkdir(ARTIFACTS, { recursive: true });
-  const dest = path.join(ARTIFACTS, "expal_linkedin_marketing_4x5.mp4");
-  const destSilent = path.join(ARTIFACTS, "expal_linkedin_marketing_4x5_silent.mp4");
+  const dest = path.join(ARTIFACTS, "expal_linkedin_marketing_4x5_transcript.mp4");
+  const destSilent = path.join(ARTIFACTS, "expal_linkedin_marketing_4x5_transcript_silent.mp4");
   await copyFile(finalPath, dest);
   await copyFile(silent, destSilent);
   for (const beat of BEATS) {
     await copyFile(
       path.join(OUT_DIR, "frames", `${beat.id}.png`),
-      path.join(ARTIFACTS, `linkedin_ad_${beat.id}.png`),
+      path.join(ARTIFACTS, `linkedin_ad_vo_${beat.id}.png`),
     );
   }
   return dest;

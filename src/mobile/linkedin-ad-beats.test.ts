@@ -7,30 +7,35 @@ import {
 } from "./linkedin-ad-beats";
 
 describe("LinkedIn marketing ad beats", () => {
-  it("runs a LinkedIn-length product cut, not a personal story", () => {
-    expect(LINKEDIN_AD_DURATION_MS).toBeGreaterThanOrEqual(30_000);
-    expect(LINKEDIN_AD_DURATION_MS).toBeLessThanOrEqual(45_000);
+  it("runs a LinkedIn-length product cut timed to the full transcript", () => {
+    expect(LINKEDIN_AD_DURATION_MS).toBeGreaterThanOrEqual(50_000);
+    expect(LINKEDIN_AD_DURATION_MS).toBeLessThanOrEqual(60_000);
     expect(LINKEDIN_AD_BEATS[0]?.kind).toBe("hook");
     expect(LINKEDIN_AD_BEATS.at(-1)?.kind).toBe("cta");
     expect(LINKEDIN_AD_BEATS.at(-1)?.endMs).toBe(LINKEDIN_AD_DURATION_MS);
   });
 
-  it("labels the four live screenshots as feature names only", () => {
+  it("keeps the four live screenshots, each once", () => {
     const phones = LINKEDIN_AD_BEATS.filter((beat) => beat.kind === "phone");
-    expect(phones.map((beat) => beat.caption)).toEqual(["Home", "Explore", "Journey", "Profile"]);
+    expect(phones.map((beat) => beat.id)).toEqual(["home", "explore", "journey", "profile"]);
     expect(linkedInAdHomeAppearances()).toBe(1);
     expect(new Set(phones.map((beat) => beat.shot)).size).toBe(4);
   });
 
-  it("does not narrate screenshot contents or a founder story", () => {
-    const blob = JSON.stringify(LINKEDIN_AD_BEATS).toLowerCase();
-    expect(blob).not.toMatch(/bahar|107 days|pps number|claude|cursor|adtech|i built|i moved/);
+  it("uses the marketing transcript, not a founder story", () => {
+    const blob = JSON.stringify(LINKEDIN_AD_BEATS);
+    expect(blob).toMatch(/twenty-five open tabs/);
+    expect(blob).toMatch(/Meet EXPal/);
+    expect(blob).toMatch(/PPS, IRP/);
+    expect(blob).toMatch(/No ads\. No noise/);
+    expect(blob).toMatch(/Move\. Settle\. Connect/);
+    expect(blob.toLowerCase()).not.toMatch(/bahar|claude|cursor|adtech|i built|i moved/);
     expect(blob.includes("...without")).toBe(false);
   });
 
-  it("hooks on Ireland and closes on a download CTA", () => {
-    expect(linkedInAdBeatAt(500).caption).toMatch(/Ireland/);
-    expect(LINKEDIN_AD_BEATS.at(-1)?.caption).toMatch(/Download EXPal free/);
+  it("opens on the country move and closes on the slogan", () => {
+    expect(linkedInAdBeatAt(500).caption).toMatch(/new country/);
+    expect(LINKEDIN_AD_BEATS.at(-1)?.caption).toMatch(/Move\. Settle\. Connect/);
   });
 
   it("covers a continuous timeline", () => {

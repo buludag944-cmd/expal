@@ -61,12 +61,15 @@ function PlayMark() {
   );
 }
 
-function HookScene({ caption }: { caption: string }) {
+function HookScene({ caption, captionLine2 }: { caption: string; captionLine2?: string }) {
   return (
     <div className="lm-hook" data-scene="hook">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className="brand" src="/expal-brand.png" alt="EXPal" width={1080} height={1080} />
-      <p className="lm-line">{caption}</p>
+      <img className="brand" src="/expal-brand.png" alt="EXPal" width={900} height={900} />
+      <p className="lm-line">
+        {caption}
+        {captionLine2 ? <small>{captionLine2}</small> : null}
+      </p>
     </div>
   );
 }
@@ -162,10 +165,17 @@ function LinkedInAdInner() {
         data-beat={beat.id}
         data-kind={beat.kind}
       >
-        {beat.kind === "hook" ? <HookScene caption={beat.caption} /> : null}
+        {beat.kind === "hook" ? (
+          <HookScene caption={beat.caption} captionLine2={beat.captionLine2} />
+        ) : null}
         {beat.kind === "phone" ? <PhoneBeat beat={beat} /> : null}
         {beat.kind === "cta" ? <CtaScene caption={beat.caption} /> : null}
-        {beat.kind === "phone" && !recordMode ? <p className="lm-caption">{beat.caption}</p> : null}
+        {beat.kind === "phone" && !recordMode ? (
+          <p className="lm-caption">
+            {beat.caption}
+            {beat.captionLine2 ? <small>{beat.captionLine2}</small> : null}
+          </p>
+        ) : null}
       </div>
     </div>
   );

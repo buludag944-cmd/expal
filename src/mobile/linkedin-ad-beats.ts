@@ -7,57 +7,71 @@ export type LinkedInAdBeat = {
   kind: LinkedInAdBeatKind;
   shot?: string;
   caption: string;
+  captionLine2?: string;
 };
 
-/** 36s LinkedIn product ad (4:5). Feature names only — not screenshot copy. */
-export const LINKEDIN_AD_DURATION_MS = 36_000;
+/** 56s LinkedIn product ad (4:5). Timed to the full marketing transcript. */
+export const LINKEDIN_AD_DURATION_MS = 56_000;
 
 export const LINKEDIN_AD_BEATS: LinkedInAdBeat[] = [
   {
     id: "hook",
     startMs: 0,
-    endMs: 4_000,
+    endMs: 7_200,
     kind: "hook",
-    caption: "Moving to Ireland?",
+    caption: "Moving to a new country shouldn’t mean",
+    captionLine2: "twenty-five open tabs and endless unanswered questions.",
+  },
+  {
+    id: "meet",
+    startMs: 7_200,
+    endMs: 13_200,
+    kind: "hook",
+    caption: "Meet EXPal — built to make",
+    captionLine2: "moving to and settling in Ireland simpler.",
   },
   {
     id: "home",
-    startMs: 4_000,
-    endMs: 10_000,
+    startMs: 13_200,
+    endMs: 21_800,
     kind: "phone",
     shot: "/story/home.jpg",
-    caption: "Home",
+    caption: "Find practical guidance on PPS, IRP,",
+    captionLine2: "housing, banking and employment rights.",
   },
   {
     id: "explore",
-    startMs: 10_000,
-    endMs: 16_000,
+    startMs: 21_800,
+    endMs: 32_400,
     kind: "phone",
     shot: "/story/explore.jpg",
-    caption: "Explore",
+    caption: "Connect directly with other expats.",
+    captionLine2: "Ask questions, build your network, request referrals.",
   },
   {
     id: "journey",
-    startMs: 16_000,
-    endMs: 22_000,
+    startMs: 32_400,
+    endMs: 39_600,
     kind: "phone",
     shot: "/story/journey.jpg",
-    caption: "Journey",
+    caption: "Soon, you’ll also be able to track",
+    captionLine2: "important document and IRP renewal dates.",
   },
   {
     id: "profile",
-    startMs: 22_000,
-    endMs: 28_000,
+    startMs: 39_600,
+    endMs: 48_400,
     kind: "phone",
     shot: "/story/profile.jpg",
-    caption: "Profile",
+    caption: "No ads. No noise.",
+    captionLine2: "Just guidance, connection and community.",
   },
   {
     id: "cta",
-    startMs: 28_000,
-    endMs: 36_000,
+    startMs: 48_400,
+    endMs: 56_000,
     kind: "cta",
-    caption: "Download EXPal free",
+    caption: "EXPal. Move. Settle. Connect.",
   },
 ];
 
