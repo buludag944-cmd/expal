@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "export:ad": "node scripts/export-marketing-ad.mjs"
+    "export:ad": "node scripts/export-marketing-ad.mjs",
+    "export:story": "node scripts/export-linkedin-story.mjs"
   },
   "dependencies": {
     "firebase": "^12.18.0",
