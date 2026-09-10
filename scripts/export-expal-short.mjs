@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
  * Render the Remotion ExpalShort composition (1080x1920, 36s).
+ * Delivery encode: H.264 10 Mbps, 30 fps, yuv420p, AAC 192 kbps, +faststart.
  * Does not overwrite the 28s Play/TikTok cut, LinkedIn ads, or the personal story.
  */
 import { spawn } from "node:child_process";
@@ -187,46 +188,55 @@ async function stills() {
   }
 }
 
-async function muxAudio(silent, narration) {
-  const finalPath = path.join(OUT_DIR, "expal_youtube_short_9x16.mp4");
-  if (!narration) {
-    await copyFile(silent, finalPath);
-    return finalPath;
-  }
-  await run("ffmpeg", [
+async function encodeDelivery(video, narration) {
+  const finalPath = path.join(OUT_DIR, "expal_youtube_short_9x16_10mbps.mp4");
+  const args = [
     "-y",
     "-i",
-    silent,
-    "-i",
-    narration,
-    "-filter_complex",
-    "[1:a]aresample=44100,aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,loudnorm=I=-14:TP=-1.5:LRA=11,afade=t=in:st=0:d=0.1,afade=t=out:st=35.2:d=0.6[a]",
-    "-map",
-    "0:v",
-    "-map",
-    "[a]",
+    video,
+  ];
+  if (narration) {
+    args.push(
+      "-i",
+      narration,
+      "-filter_complex",
+      "[0:v]scale=1080:1920:flags=lanczos,fps=30,format=yuv420p[v];[1:a]aresample=44100,aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,loudnorm=I=-14:TP=-1.5:LRA=11,afade=t=in:st=0:d=0.1,afade=t=out:st=35.2:d=0.6[a]",
+      "-map",
+      "[v]",
+      "-map",
+      "[a]",
+    );
+  } else {
+    args.push("-vf", "scale=1080:1920:flags=lanczos,fps=30,format=yuv420p", "-an");
+  }
+  args.push(
     "-c:v",
-    "copy",
-    "-c:a",
-    "aac",
-    "-b:a",
-    "192k",
-    "-ar",
-    "44100",
-    "-ac",
-    "2",
-    "-shortest",
-    "-movflags",
-    "+faststart",
-    finalPath,
-  ]);
+    "libx264",
+    "-preset",
+    "slow",
+    "-b:v",
+    "10M",
+    "-maxrate",
+    "10M",
+    "-bufsize",
+    "20M",
+    "-pix_fmt",
+    "yuv420p",
+    "-profile:v",
+    "high",
+  );
+  if (narration) {
+    args.push("-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2", "-shortest");
+  }
+  args.push("-movflags", "+faststart", finalPath);
+  await run("ffmpeg", args);
   return finalPath;
 }
 
 async function copyArtifacts(finalPath, silent) {
   await mkdir(ARTIFACTS, { recursive: true });
-  const dest = path.join(ARTIFACTS, "expal_youtube_short_9x16.mp4");
-  const destSilent = path.join(ARTIFACTS, "expal_youtube_short_9x16_silent.mp4");
+  const dest = path.join(ARTIFACTS, "expal_youtube_short_9x16_10mbps.mp4");
+  const destSilent = path.join(ARTIFACTS, "expal_youtube_short_9x16_10mbps_src_silent.mp4");
   await copyFile(finalPath, dest);
   await copyFile(silent, destSilent);
   for (const beat of BEATS) {
@@ -245,9 +255,9 @@ async function probe(file) {
     "-select_streams",
     "v:0",
     "-show_entries",
-    "stream=width,height,codec_name,duration",
+    "stream=width,height,codec_name,bit_rate,avg_frame_rate,pix_fmt,duration",
     "-show_entries",
-    "format=duration",
+    "format=duration,bit_rate",
     "-of",
     "json",
     file,
@@ -260,7 +270,7 @@ async function main() {
   const narration = await tryNarration();
   const silent = await renderSilent();
   await stills();
-  const finalPath = await muxAudio(silent, narration);
+  const finalPath = await encodeDelivery(silent, narration);
   const artifact = await copyArtifacts(finalPath, silent);
   const info = await probe(finalPath);
   await writeFile(path.join(OUT_DIR, "probe.json"), JSON.stringify(info, null, 2));
