@@ -50,8 +50,8 @@ import "./expal-app.css";
 
 export type AppCaption = { kicker: string; body: string };
 
-type Tab = "home" | "explore" | "community" | "journey" | "profile";
-type Overlay =
+export type Tab = "home" | "explore" | "community" | "journey" | "profile";
+export type Overlay =
   | "housing"
   | "events"
   | "referrals"
@@ -142,11 +142,15 @@ function StatusBar({ light }: { light?: boolean }) {
 
 export default function ExpalApp({
   onCaption,
+  initialTab = "home",
+  initialOverlay = null,
 }: {
   onCaption?: (caption: AppCaption) => void;
+  initialTab?: Tab;
+  initialOverlay?: Overlay | null;
 }) {
-  const [tab, setTab] = useState<Tab>("home");
-  const [overlay, setOverlay] = useState<Overlay | null>(null);
+  const [tab, setTab] = useState<Tab>(initialTab);
+  const [overlay, setOverlay] = useState<Overlay | null>(initialOverlay);
   const [journeyTab, setJourneyTab] = useState<"tracker" | "checklist" | "vault">("tracker");
   const [chatOpen, setChatOpen] = useState(false);
   const [activeTask, setActiveTask] = useState<(typeof DEADLINES)[number] | null>(null);
