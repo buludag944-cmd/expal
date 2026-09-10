@@ -12,7 +12,8 @@ App id: `com.yourbrandexpal`
 
 - Public landing page with a blog section
 - **Mobile app** at `/app` (Home, Explore, Community, Journey visa tracker, Profile)
-- Product walkthrough at `/demo`
+- Product walkthrough at `/demo` (landscape studio for the full narrated demo)
+- Vertical marketing cut studio at `/demo/ad` (9:16, 1080×1920, Play Store / TikTok / Instagram)
 - **Sign up / set up account** and **Log in with Google** (Firebase Gmail — same project as the EXPal app)
 - Account setup after the first Google sign-in
 - Individual article URLs with titles, descriptions, sitemap, RSS, and Open Graph
@@ -69,10 +70,28 @@ This repo includes `netlify.toml` pointed at `expalapp.netlify.app`. Set `ADMIN_
 - JSON-LD for the site and each article
 - Android App Links at `/.well-known/assetlinks.json` for `com.yourbrandexpal`
 
+## Marketing video (9:16)
+
+The full product walkthrough is recorded from `/demo` and should be kept as the long demo.
+
+The Play / TikTok / Instagram cut is a **separate** 28-second export from `/demo/ad`:
+
+- Phone is centered with even side margins (no right-edge clip)
+- No leftover landscape copy on the left
+- Home appears once, then Housing → Community → Local Know-How → download CTA
+
+```bash
+npm run export:ad
+```
+
+Writes `expal_marketing_play_tiktok_9x16.mp4` (does not overwrite the full demo file).
+
 ## Scripts
 
 ```bash
 npm test
 npm run build
 npm start
+npm run export:ad
 ```
+
