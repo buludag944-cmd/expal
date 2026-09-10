@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "export:ad": "node scripts/export-marketing-ad.mjs",
-    "export:story": "node scripts/export-linkedin-story.mjs"
+    "export:story": "node scripts/export-linkedin-story.mjs",
+    "export:linkedin-ad": "node scripts/export-linkedin-ad.mjs"
   },
   "dependencies": {
     "firebase": "^12.18.0",
