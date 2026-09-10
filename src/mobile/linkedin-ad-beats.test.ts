@@ -28,14 +28,18 @@ describe("LinkedIn marketing ad beats", () => {
     expect(blob).toMatch(/Meet EXPal/);
     expect(blob).toMatch(/PPS, IRP/);
     expect(blob).toMatch(/No ads\. No noise/);
-    expect(blob).toMatch(/Move\. Settle\. Connect/);
+    expect(blob).toMatch(/Relocate smarter/);
+    expect(blob).toMatch(/settle faster/);
+    expect(blob).toMatch(/thrive longer/);
+    expect(blob).not.toMatch(/Move\. Settle\. Connect/);
     expect(blob.toLowerCase()).not.toMatch(/bahar|claude|cursor|adtech|i built|i moved/);
     expect(blob.includes("...without")).toBe(false);
   });
 
   it("opens on the country move and closes on the slogan", () => {
     expect(linkedInAdBeatAt(500).caption).toMatch(/new country/);
-    expect(LINKEDIN_AD_BEATS.at(-1)?.caption).toMatch(/Move\. Settle\. Connect/);
+    expect(LINKEDIN_AD_BEATS.at(-1)?.caption).toMatch(/Relocate smarter/);
+    expect(LINKEDIN_AD_BEATS.at(-1)?.captionLine2).toMatch(/thrive longer/);
   });
 
   it("covers a continuous timeline", () => {

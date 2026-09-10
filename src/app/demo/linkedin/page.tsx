@@ -74,16 +74,21 @@ function HookScene({ caption, captionLine2 }: { caption: string; captionLine2?: 
   );
 }
 
-function CtaScene({ caption }: { caption: string }) {
+function CtaScene({ caption, captionLine2 }: { caption: string; captionLine2?: string }) {
   return (
     <div className="lm-cta" data-scene="cta">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img className="brand" src="/expal-brand.png" alt="EXPal" width={720} height={720} />
-      <div className="lm-stores">
-        <AppStoreMark />
-        <PlayMark />
+      <div className="lm-cta-copy">
+        <div className="lm-stores">
+          <AppStoreMark />
+          <PlayMark />
+        </div>
+        <p className="lm-line">
+          {caption}
+          {captionLine2 ? <small>{captionLine2}</small> : null}
+        </p>
       </div>
-      <p className="lm-line">{caption}</p>
     </div>
   );
 }
@@ -105,6 +110,7 @@ function LinkedInAdInner() {
   const params = useSearchParams();
   const previewId = params.get("preview");
   const recordMode = params.get("record") === "1";
+  const wide = params.get("wide") === "1";
   const [elapsed, setElapsed] = useState(() => {
     const preview = LINKEDIN_AD_BEATS.find((beat) => beat.id === previewId);
     return preview ? preview.startMs + 80 : 0;
@@ -160,17 +166,20 @@ function LinkedInAdInner() {
         ))}
       </div>
       <div
-        className="lm-stage"
+        className={`lm-stage${wide ? " is-wide" : ""}`}
         data-lm-playing={playing ? "true" : "false"}
         data-beat={beat.id}
         data-kind={beat.kind}
+        data-wide={wide ? "true" : "false"}
       >
         {beat.kind === "hook" ? (
           <HookScene caption={beat.caption} captionLine2={beat.captionLine2} />
         ) : null}
         {beat.kind === "phone" ? <PhoneBeat beat={beat} /> : null}
-        {beat.kind === "cta" ? <CtaScene caption={beat.caption} /> : null}
-        {beat.kind === "phone" && !recordMode ? (
+        {beat.kind === "cta" ? (
+          <CtaScene caption={beat.caption} captionLine2={beat.captionLine2} />
+        ) : null}
+        {beat.kind === "phone" && (!recordMode || wide) ? (
           <p className="lm-caption">
             {beat.caption}
             {beat.captionLine2 ? <small>{beat.captionLine2}</small> : null}

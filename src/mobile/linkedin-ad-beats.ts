@@ -71,7 +71,8 @@ export const LINKEDIN_AD_BEATS: LinkedInAdBeat[] = [
     startMs: 48_400,
     endMs: 56_000,
     kind: "cta",
-    caption: "EXPal. Move. Settle. Connect.",
+    caption: "Relocate smarter, settle faster",
+    captionLine2: "and thrive longer.",
   },
 ];
 

@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 /**
- * Record /demo/linkedin at 1080x1350 (4:5) for a LinkedIn product ad.
+ * Record /demo/linkedin for a product ad.
+ * Default: 1080x1350 (4:5) LinkedIn.
+ * LM_WIDE=1: 1920x1080 (16:9) YouTube, with in-frame captions.
  * Does not overwrite the full demo, the 9:16 social cut, or the personal story.
  */
 import { spawn } from "node:child_process";
@@ -11,13 +13,15 @@ import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const WIDTH = 1080;
-const HEIGHT = 1350;
+const WIDE = process.env.LM_WIDE === "1";
+const WIDTH = WIDE ? 1920 : 1080;
+const HEIGHT = WIDE ? 1080 : 1350;
 const DURATION_MS = 56_000;
 const BASE = process.env.AD_BASE_URL || "http://127.0.0.1:3000";
-const OUT_DIR = process.env.LM_OUT_DIR || "/tmp/expal-linkedin-ad";
+const OUT_DIR = process.env.LM_OUT_DIR || (WIDE ? "/tmp/expal-youtube-ad" : "/tmp/expal-linkedin-ad");
 const ARTIFACTS = process.env.AD_ARTIFACTS_DIR || "/opt/cursor/artifacts";
 const CHROME = process.env.CHROME_PATH || "/usr/local/bin/google-chrome";
+const PAGE_QS = WIDE ? "wide=1&" : "";
 
 const BEATS = [
   {
@@ -67,7 +71,7 @@ const BEATS = [
     id: "cta",
     startMs: 48_400,
     kind: "cta",
-    voice: "EXPal. Move. Settle. Connect.",
+    voice: "EXPal. Relocate smarter, settle faster and thrive longer.",
   },
 ];
 
@@ -160,7 +164,7 @@ async function screenshots(browser) {
     deviceScaleFactor: 1,
   });
   for (const beat of BEATS) {
-    await page.goto(`${BASE}/demo/linkedin?preview=${beat.id}`, { waitUntil: "networkidle" });
+    await page.goto(`${BASE}/demo/linkedin?${PAGE_QS}preview=${beat.id}`, { waitUntil: "networkidle" });
     await page.waitForSelector(`[data-beat="${beat.id}"]`);
     await page.addStyleTag({
       content: "nextjs-portal,[data-next-badge-root]{display:none!important}",
@@ -191,7 +195,7 @@ async function recordVideo(browser) {
     style.textContent = "nextjs-portal,[data-next-badge-root]{display:none!important}";
     document.documentElement.appendChild(style);
   });
-  await page.goto(`${BASE}/demo/linkedin?record=1`, { waitUntil: "domcontentloaded" });
+  await page.goto(`${BASE}/demo/linkedin?${PAGE_QS}record=1`, { waitUntil: "domcontentloaded" });
   await page.waitForFunction(() => typeof window.__EXPAL_START_LM === "function");
   await page.waitForFunction(() => [...document.images].every((img) => img.complete && img.naturalWidth > 0));
   await page.evaluate(() => window.__EXPAL_START_LM?.());
@@ -304,8 +308,21 @@ bed.export("${path.join(voiceDir, "narration.mp3")}", format="mp3", bitrate="192
 }
 
 async function transcode(rawVideo, narration, assFile) {
-  const silent = path.join(OUT_DIR, "expal_linkedin_marketing_4x5_silent.mp4");
-  const assPath = assFile.replace(/\\/g, "/").replace(/:/g, "\\:");
+  const silentName = WIDE
+    ? "expal_youtube_marketing_16x9_silent.mp4"
+    : "expal_linkedin_marketing_4x5_relocate_silent.mp4";
+  const finalName = WIDE ? "expal_youtube_marketing_16x9.mp4" : "expal_linkedin_marketing_4x5_relocate.mp4";
+  const silent = path.join(OUT_DIR, silentName);
+  const filters = [
+    WIDE
+      ? "scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2"
+      : "scale=1080:1350:force_original_aspect_ratio=decrease,pad=1080:1350:(ow-iw)/2:(oh-ih)/2",
+    "fps=30",
+  ];
+  if (!WIDE && assFile) {
+    filters.push(`subtitles=${assFile.replace(/\\/g, "/").replace(/:/g, "\\:")}`);
+  }
+  filters.push("format=yuv420p");
   await run("ffmpeg", [
     "-y",
     "-i",
@@ -313,7 +330,7 @@ async function transcode(rawVideo, narration, assFile) {
     "-t",
     "56.00",
     "-vf",
-    `scale=1080:1350:force_original_aspect_ratio=decrease,pad=1080:1350:(ow-iw)/2:(oh-ih)/2,fps=30,subtitles=${assPath},format=yuv420p`,
+    filters.join(","),
     "-c:v",
     "libx264",
     "-preset",
@@ -332,7 +349,7 @@ async function transcode(rawVideo, narration, assFile) {
     silent,
   ]);
 
-  const finalPath = path.join(OUT_DIR, "expal_linkedin_marketing_4x5.mp4");
+  const finalPath = path.join(OUT_DIR, finalName);
   if (narration) {
     await run("ffmpeg", [
       "-y",
@@ -369,14 +386,19 @@ async function transcode(rawVideo, narration, assFile) {
 
 async function copyArtifacts(finalPath, silent) {
   await mkdir(ARTIFACTS, { recursive: true });
-  const dest = path.join(ARTIFACTS, "expal_linkedin_marketing_4x5_transcript.mp4");
-  const destSilent = path.join(ARTIFACTS, "expal_linkedin_marketing_4x5_transcript_silent.mp4");
+  const destName = WIDE ? "expal_youtube_marketing_16x9.mp4" : "expal_linkedin_marketing_4x5_relocate.mp4";
+  const destSilentName = WIDE
+    ? "expal_youtube_marketing_16x9_silent.mp4"
+    : "expal_linkedin_marketing_4x5_relocate_silent.mp4";
+  const framePrefix = WIDE ? "youtube_ad" : "linkedin_ad_relocate";
+  const dest = path.join(ARTIFACTS, destName);
+  const destSilent = path.join(ARTIFACTS, destSilentName);
   await copyFile(finalPath, dest);
   await copyFile(silent, destSilent);
   for (const beat of BEATS) {
     await copyFile(
       path.join(OUT_DIR, "frames", `${beat.id}.png`),
-      path.join(ARTIFACTS, `linkedin_ad_vo_${beat.id}.png`),
+      path.join(ARTIFACTS, `${framePrefix}_${beat.id}.png`),
     );
   }
   return dest;
@@ -403,12 +425,12 @@ async function main() {
   await mkdir(OUT_DIR, { recursive: true });
   const stop = await ensureServer();
   try {
-    await writeAss();
+    const ass = WIDE ? null : await writeAss();
     await withBrowser(async (browser) => {
       await screenshots(browser);
       const raw = await recordVideo(browser);
       const narration = await tryNarration();
-      const { silent, finalPath } = await transcode(raw, narration, path.join(OUT_DIR, "captions.ass"));
+      const { silent, finalPath } = await transcode(raw, narration, ass);
       const artifact = await copyArtifacts(finalPath, silent);
       const info = await probe(finalPath);
       await writeFile(path.join(OUT_DIR, "probe.json"), JSON.stringify(info, null, 2));
