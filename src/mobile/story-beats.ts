@@ -96,7 +96,7 @@ export const STORY_BEATS: StoryBeat[] = [
     endMs: 52_000,
     kind: "card",
     lines: [
-      "EXPal is live on Google Play.",
+      "EXPal is live on the App Store and Google Play.",
       "If you're building something with AI tools, or moving to Ireland yourself — I'd love to connect.",
     ],
     caption: "I'd love to connect",

@@ -32,6 +32,12 @@ describe("LinkedIn personal story beats", () => {
     expect((turnB?.endMs ?? 0) - (turnA?.startMs ?? 0)).toBe(10_000);
   });
 
+  it("names both stores on the close", () => {
+    const close = STORY_BEATS.find((beat) => beat.id === "close-copy");
+    expect(close?.lines?.[0]).toMatch(/App Store/);
+    expect(close?.lines?.[0]).toMatch(/Google Play/);
+  });
+
   it("covers a continuous timeline without leftover landscape copy", () => {
     for (let i = 1; i < STORY_BEATS.length; i += 1) {
       expect(STORY_BEATS[i].startMs).toBe(STORY_BEATS[i - 1].endMs);

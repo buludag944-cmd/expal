@@ -74,7 +74,7 @@ const BEATS = [
     id: "close-copy",
     startMs: 45_000,
     kind: "card",
-    voice: "EXPal is live on Google Play. If you're building something with AI tools, or moving to Ireland yourself — I'd love to connect.",
+    voice: "EXPal is live on the App Store and Google Play. If you're building something with AI tools, or moving to Ireland yourself — I'd love to connect.",
   },
   {
     id: "close-logo",

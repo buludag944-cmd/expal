@@ -185,12 +185,20 @@ body:has(.story-root) [data-next-mark-loading] {
   color: #7ecef4;
 }
 
+.story-stores {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 28px;
+}
+
 .story-play {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-top: 28px;
-  padding: 10px 16px 10px 12px;
+  gap: 10px;
+  margin-top: 0;
+  padding: 10px 14px 10px 10px;
   border-radius: 10px;
   background: #111;
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -214,7 +222,7 @@ body:has(.story-root) [data-next-mark-loading] {
 }
 
 .story-play b {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 800;
 }
 

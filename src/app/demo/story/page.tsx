@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
 import ExpalApp from "@/mobile/ExpalApp";
 import {
@@ -31,18 +31,48 @@ function StoryCard({ kicker, lines }: { kicker?: string; lines: string[] }) {
   );
 }
 
+function StoreMark({
+  label,
+  sub,
+  children,
+}: {
+  label: string;
+  sub: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="story-play" aria-label={label}>
+      {children}
+      <span className="play-copy">
+        <small>{sub}</small>
+        <b>{label}</b>
+      </span>
+    </div>
+  );
+}
+
+function AppStoreMark() {
+  return (
+    <StoreMark label="App Store" sub="Download on the">
+      <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true">
+        <rect width="36" height="36" rx="8" fill="#111" />
+        <path
+          fill="#fff"
+          d="M18.2 9.2c.8-1 2.1-1.7 3.3-1.8-.1 1.5-.9 2.8-2.1 3.6-.8.5-1.8.9-2.7.8.2-1.3.7-2.6 1.5-2.6zm-1.4 3.2c1.4-1.7 4-2 5.8-.8 1 .7 1.7 1.8 1.8 3.1 0 2.9-2.3 6.3-4.1 8-.9.8-1.9.5-2.8-.1-.8-.5-1.6-.5-2.4 0-.8.5-1.7.9-2.6.1C9.7 21.4 8.4 17.8 8.4 15.2c0-2.9 2.1-4.8 4.6-5 1 0 1.9.4 2.5 1.2z"
+        />
+      </svg>
+    </StoreMark>
+  );
+}
+
 function PlayMark() {
   return (
-    <div className="story-play" aria-label="Google Play">
+    <StoreMark label="Google Play" sub="Get it on">
       <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true">
         <rect width="36" height="36" rx="8" fill="#3ddc84" />
         <path d="M13 9.5v17l14-8.5-14-8.5z" fill="#111" />
       </svg>
-      <span className="play-copy">
-        <small>Get it on</small>
-        <b>Google Play</b>
-      </span>
-    </div>
+    </StoreMark>
   );
 }
 
@@ -54,7 +84,10 @@ function CloseScene() {
       <p className="wordmark">
         EX<span>Pal</span>
       </p>
-      <PlayMark />
+      <div className="story-stores">
+        <AppStoreMark />
+        <PlayMark />
+      </div>
       <p className="story-name">Bahar Uludag</p>
       <p className="story-handle">Founder, EXPal</p>
     </div>
