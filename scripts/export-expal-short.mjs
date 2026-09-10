@@ -150,10 +150,12 @@ async function renderSilent() {
     CHROME,
     "--gl",
     "angle",
+    "--image-format",
+    "png",
     "--timeout",
     "120000",
     "--crf",
-    "18",
+    "8",
     "--concurrency",
     "2",
   ]);
@@ -189,7 +191,7 @@ async function stills() {
 }
 
 async function encodeDelivery(video, narration) {
-  const finalPath = path.join(OUT_DIR, "expal_youtube_short_9x16_10mbps.mp4");
+  const finalPath = path.join(OUT_DIR, "expal_youtube_short_9x16_h264_10mbps.mp4");
   const args = [
     "-y",
     "-i",
@@ -216,6 +218,8 @@ async function encodeDelivery(video, narration) {
     "slow",
     "-b:v",
     "10M",
+    "-minrate",
+    "10M",
     "-maxrate",
     "10M",
     "-bufsize",
@@ -224,6 +228,8 @@ async function encodeDelivery(video, narration) {
     "yuv420p",
     "-profile:v",
     "high",
+    "-x264-params",
+    "nal-hrd=cbr:filler=1",
   );
   if (narration) {
     args.push("-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2", "-shortest");
@@ -239,12 +245,6 @@ async function copyArtifacts(finalPath, silent) {
   const destSilent = path.join(ARTIFACTS, "expal_youtube_short_9x16_10mbps_src_silent.mp4");
   await copyFile(finalPath, dest);
   await copyFile(silent, destSilent);
-  for (const beat of BEATS) {
-    await copyFile(
-      path.join(OUT_DIR, "frames", `${beat.id}.png`),
-      path.join(ARTIFACTS, `youtube_short_${beat.id}.png`),
-    );
-  }
   return dest;
 }
 
