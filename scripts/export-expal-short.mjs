@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
- * Render the Remotion ExpalShort composition (1080x1920, 36s).
+ * Render the Remotion ExpalShort composition (1080x1920, 53s).
+ * TTS: ~1s lead-in before each beat, 0.55s between sentences.
  * Delivery encode: H.264 10 Mbps, 30 fps, yuv420p, AAC 192 kbps, +faststart.
  * Does not overwrite the 28s Play/TikTok cut, LinkedIn ads, or the personal story.
  */
@@ -10,12 +11,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const DURATION_MS = 36_000;
+const DURATION_MS = 53_000;
 const FPS = 30;
-const OUT_DIR = process.env.SHORT_OUT_DIR || "/tmp/expal-short";
-const ARTIFACTS = process.env.AD_ARTIFACTS_DIR || "/opt/cursor/artifacts";
-const CHROME = process.env.CHROME_PATH || "/usr/local/bin/google-chrome";
-const ENTRY = path.join(ROOT, "src/video/index.ts");
+const TTS_LEAD_IN_MS = 1_000;
+const TTS_BETWEEN_SENTENCES_MS = 550;
 
 const BEATS = [
   {
@@ -26,30 +25,41 @@ const BEATS = [
   },
   {
     id: "meet",
-    startMs: 7_000,
+    startMs: 8_000,
     voice: "Meet EXPal — built to make moving to and settling in Ireland simpler.",
   },
   {
     id: "home",
-    startMs: 12_000,
+    startMs: 15_000,
     voice: "Find practical guidance on PPS, IRP, housing, banking and employment rights.",
   },
   {
     id: "explore",
-    startMs: 18_000,
+    startMs: 24_000,
     voice: "Connect with other expats, ask questions, and request career referrals.",
   },
   {
     id: "profile",
-    startMs: 24_000,
+    startMs: 32_000,
     voice: "No ads. No noise. Just guidance, connection and community.",
   },
   {
     id: "cta",
-    startMs: 29_000,
+    startMs: 43_000,
     voice: "EXPal. Relocate smarter, settle faster and thrive longer.",
   },
 ];
+const OUT_DIR = process.env.SHORT_OUT_DIR || "/tmp/expal-short";
+const ARTIFACTS = process.env.AD_ARTIFACTS_DIR || "/opt/cursor/artifacts";
+const CHROME = process.env.CHROME_PATH || "/usr/local/bin/google-chrome";
+const ENTRY = path.join(ROOT, "src/video/index.ts");
+
+function splitSentences(text) {
+  return text
+    .split(/(?<=[.?!])\s+/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
 
 function run(cmd, args, opts = {}) {
   return new Promise((resolve, reject) => {
@@ -91,29 +101,34 @@ async function tryNarration() {
   } catch {
     return null;
   }
-  const clips = [];
-  for (const [i, beat] of BEATS.entries()) {
-    const out = path.join(voiceDir, `${String(i).padStart(2, "0")}-${beat.id}.mp3`);
-    try {
-      await run(
-        "python3",
-        [
-          "-m",
-          "edge_tts",
-          "--voice",
-          "en-IE-EmilyNeural",
-          "--rate=-4%",
-          "--text",
-          beat.voice,
-          "--write-media",
-          out,
-        ],
-        { stdio: "ignore" },
-      );
-      clips.push({ file: out, delayMs: beat.startMs + 160 });
-    } catch {
-      return null;
+  const groups = [];
+  for (const beat of BEATS) {
+    const sentences = splitSentences(beat.voice);
+    const files = [];
+    for (const [j, sentence] of sentences.entries()) {
+      const out = path.join(voiceDir, `${beat.id}-${j}.mp3`);
+      try {
+        await run(
+          "python3",
+          [
+            "-m",
+            "edge_tts",
+            "--voice",
+            "en-IE-EmilyNeural",
+            "--rate=-4%",
+            "--text",
+            sentence,
+            "--write-media",
+            out,
+          ],
+          { stdio: "ignore" },
+        );
+        files.push(out);
+      } catch {
+        return null;
+      }
     }
+    groups.push({ startMs: beat.startMs, files });
   }
 
   const mixPy = path.join(voiceDir, "mix.py");
@@ -121,11 +136,19 @@ async function tryNarration() {
     mixPy,
     `
 from pydub import AudioSegment
-clips = ${JSON.stringify(clips)}
+groups = ${JSON.stringify(groups)}
+lead_in = ${TTS_LEAD_IN_MS}
+between = ${TTS_BETWEEN_SENTENCES_MS}
 bed = AudioSegment.silent(duration=${DURATION_MS})
-for clip in clips:
-    audio = AudioSegment.from_file(clip["file"])
-    bed = bed.overlay(audio, position=clip["delayMs"])
+last_end = 0
+for group in groups:
+    t = group["startMs"] + lead_in
+    for i, path in enumerate(group["files"]):
+        audio = AudioSegment.from_file(path)
+        if i > 0:
+            t = last_end + between
+        bed = bed.overlay(audio, position=t)
+        last_end = t + len(audio)
 bed = bed + 3
 bed.export("${path.join(voiceDir, "narration.mp3")}", format="mp3", bitrate="192k")
 `,
@@ -153,7 +176,7 @@ async function renderSilent() {
     "--image-format",
     "png",
     "--timeout",
-    "120000",
+    "180000",
     "--crf",
     "8",
     "--concurrency",
@@ -167,11 +190,11 @@ async function stills() {
   await mkdir(shotDir, { recursive: true });
   const frames = [
     ["hook", 30],
-    ["meet", 240],
-    ["home", 420],
-    ["explore", 600],
-    ["profile", 780],
-    ["cta", 960],
+    ["meet", 270],
+    ["home", 480],
+    ["explore", 750],
+    ["profile", 990],
+    ["cta", 1320],
   ];
   for (const [id, frame] of frames) {
     await run("npx", [
@@ -191,7 +214,7 @@ async function stills() {
 }
 
 async function encodeDelivery(video, narration) {
-  const finalPath = path.join(OUT_DIR, "expal_youtube_short_9x16_h264_10mbps.mp4");
+  const finalPath = path.join(OUT_DIR, "expal_youtube_short_9x16_paced_10mbps.mp4");
   const args = [
     "-y",
     "-i",
@@ -202,7 +225,7 @@ async function encodeDelivery(video, narration) {
       "-i",
       narration,
       "-filter_complex",
-      "[0:v]scale=1080:1920:flags=lanczos,fps=30,format=yuv420p[v];[1:a]aresample=44100,aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,loudnorm=I=-14:TP=-1.5:LRA=11,afade=t=in:st=0:d=0.1,afade=t=out:st=35.2:d=0.6[a]",
+      `[0:v]scale=1080:1920:flags=lanczos,fps=30,format=yuv420p[v];[1:a]aresample=44100,aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,loudnorm=I=-14:TP=-1.5:LRA=11,afade=t=in:st=0:d=0.1,afade=t=out:st=${((DURATION_MS - 800) / 1000).toFixed(1)}:d=0.6[a]`,
       "-map",
       "[v]",
       "-map",
@@ -241,10 +264,16 @@ async function encodeDelivery(video, narration) {
 
 async function copyArtifacts(finalPath, silent) {
   await mkdir(ARTIFACTS, { recursive: true });
-  const dest = path.join(ARTIFACTS, "expal_youtube_short_9x16_10mbps.mp4");
-  const destSilent = path.join(ARTIFACTS, "expal_youtube_short_9x16_10mbps_src_silent.mp4");
+  const dest = path.join(ARTIFACTS, "expal_youtube_short_9x16_paced_10mbps.mp4");
+  const destSilent = path.join(ARTIFACTS, "expal_youtube_short_9x16_paced_silent.mp4");
   await copyFile(finalPath, dest);
   await copyFile(silent, destSilent);
+  for (const beat of BEATS) {
+    await copyFile(
+      path.join(OUT_DIR, "frames", `${beat.id}.png`),
+      path.join(ARTIFACTS, `short_paced_${beat.id}.png`),
+    );
+  }
   return dest;
 }
 

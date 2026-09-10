@@ -6,19 +6,38 @@ import {
   SHORT_FPS,
   SHORT_HEIGHT,
   SHORT_WIDTH,
+  TTS_BETWEEN_SENTENCES_MS,
+  TTS_LEAD_IN_MS,
   shortBeatAtFrame,
+  splitVoiceSentences,
 } from "./short-beats";
 
 describe("EXPal 9:16 short beats", () => {
-  it("matches the ExpalShort composition timing and frame size", () => {
+  it("matches the ExpalShort composition frame size", () => {
     expect(SHORT_FPS).toBe(30);
     expect(SHORT_WIDTH).toBe(1080);
     expect(SHORT_HEIGHT).toBe(1920);
-    expect(SHORT_DURATION_IN_FRAMES).toBe(1080);
-    expect(SHORT_DURATION_MS).toBe(36_000);
+    expect(SHORT_DURATION_IN_FRAMES).toBe(1_590);
+    expect(SHORT_DURATION_MS).toBe(53_000);
   });
 
-  it("fills 1080 frames without gaps", () => {
+  it("leaves air before and between spoken sentences", () => {
+    expect(TTS_LEAD_IN_MS).toBeGreaterThanOrEqual(900);
+    expect(TTS_LEAD_IN_MS).toBeLessThanOrEqual(1_100);
+    expect(TTS_BETWEEN_SENTENCES_MS).toBeGreaterThanOrEqual(400);
+    expect(TTS_BETWEEN_SENTENCES_MS).toBeLessThanOrEqual(700);
+    expect(splitVoiceSentences("No ads. No noise. Just guidance, connection and community.")).toEqual([
+      "No ads.",
+      "No noise.",
+      "Just guidance, connection and community.",
+    ]);
+    expect(splitVoiceSentences("EXPal. Relocate smarter, settle faster and thrive longer.")).toEqual([
+      "EXPal.",
+      "Relocate smarter, settle faster and thrive longer.",
+    ]);
+  });
+
+  it("fills the timeline without gaps", () => {
     expect(SHORT_BEATS[0]?.from).toBe(0);
     const last = SHORT_BEATS.at(-1);
     expect(last && last.from + last.durationInFrames).toBe(SHORT_DURATION_IN_FRAMES);

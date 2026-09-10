@@ -14,15 +14,28 @@ export type ShortBeat = {
 export const SHORT_FPS = 30;
 export const SHORT_WIDTH = 1080;
 export const SHORT_HEIGHT = 1920;
-export const SHORT_DURATION_IN_FRAMES = 1080;
+
+/** ~1s of air before the first sentence of each beat. */
+export const TTS_LEAD_IN_MS = 1_000;
+/** Pause between sentences inside a beat (0.4–0.7s). */
+export const TTS_BETWEEN_SENTENCES_MS = 550;
+
+/** 53s 9:16 cut: visuals hold for TTS lead-in and sentence gaps. */
+export const SHORT_DURATION_IN_FRAMES = 1_590;
 export const SHORT_DURATION_MS = (SHORT_DURATION_IN_FRAMES / SHORT_FPS) * 1000;
 
-/** 36s 9:16 YouTube Short / Reels / TikTok cut of the marketing story. */
+export function splitVoiceSentences(text: string): string[] {
+  return text
+    .split(/(?<=[.?!])\s+/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
 export const SHORT_BEATS: ShortBeat[] = [
   {
     id: "hook",
     from: 0,
-    durationInFrames: 210,
+    durationInFrames: 240,
     kind: "hook",
     caption: "Moving to a new country shouldn’t mean",
     captionLine2: "twenty-five open tabs and endless unanswered questions.",
@@ -31,8 +44,8 @@ export const SHORT_BEATS: ShortBeat[] = [
   },
   {
     id: "meet",
-    from: 210,
-    durationInFrames: 150,
+    from: 240,
+    durationInFrames: 210,
     kind: "hook",
     caption: "Meet EXPal — built to make",
     captionLine2: "moving to and settling in Ireland simpler.",
@@ -40,8 +53,8 @@ export const SHORT_BEATS: ShortBeat[] = [
   },
   {
     id: "home",
-    from: 360,
-    durationInFrames: 180,
+    from: 450,
+    durationInFrames: 270,
     kind: "phone",
     shot: "story/home.jpg",
     caption: "Find practical guidance on PPS, IRP,",
@@ -50,8 +63,8 @@ export const SHORT_BEATS: ShortBeat[] = [
   },
   {
     id: "explore",
-    from: 540,
-    durationInFrames: 180,
+    from: 720,
+    durationInFrames: 240,
     kind: "phone",
     shot: "story/explore.jpg",
     caption: "Connect directly with other expats.",
@@ -60,8 +73,8 @@ export const SHORT_BEATS: ShortBeat[] = [
   },
   {
     id: "profile",
-    from: 720,
-    durationInFrames: 150,
+    from: 960,
+    durationInFrames: 330,
     kind: "phone",
     shot: "story/profile.jpg",
     caption: "No ads. No noise.",
@@ -70,8 +83,8 @@ export const SHORT_BEATS: ShortBeat[] = [
   },
   {
     id: "cta",
-    from: 870,
-    durationInFrames: 210,
+    from: 1_290,
+    durationInFrames: 300,
     kind: "cta",
     caption: "Relocate smarter, settle faster",
     captionLine2: "and thrive longer.",
