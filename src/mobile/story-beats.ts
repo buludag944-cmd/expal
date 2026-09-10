@@ -1,5 +1,3 @@
-import type { Overlay, Tab } from "./ExpalApp";
-
 export type StoryBeatKind = "card" | "phone" | "close";
 
 export type StoryBeat = {
@@ -9,14 +7,14 @@ export type StoryBeat = {
   kind: StoryBeatKind;
   kicker?: string;
   lines?: string[];
-  tab?: Tab;
-  overlay?: Overlay | null;
+  /** Live App Store screenshot shown inside the phone frame. */
+  shot?: string;
   /** Burned-in line for phone beats; unused on cards (the card is the copy). */
   caption: string;
   captionLine2?: string;
 };
 
-/** 58s LinkedIn personal story. 4:5. Home is never shown. */
+/** 58s LinkedIn personal story. 4:5. Each live screenshot appears once. */
 export const STORY_DURATION_MS = 58_000;
 
 export const STORY_BEATS: StoryBeat[] = [
@@ -51,43 +49,39 @@ export const STORY_BEATS: StoryBeat[] = [
     caption: "So I built it myself",
   },
   {
-    id: "housing",
+    id: "home",
     startMs: 15_000,
     endMs: 22_500,
     kind: "phone",
-    tab: "home",
-    overlay: "housing",
-    caption: "Southside rooms under €1,000",
-    captionLine2: "Lived listings, not Facebook spam.",
+    shot: "/story/home.jpg",
+    caption: "107 days in Dublin",
+    captionLine2: "This is the app I actually use.",
   },
   {
-    id: "community",
+    id: "explore",
     startMs: 22_500,
     endMs: 30_000,
     kind: "phone",
-    tab: "community",
-    overlay: null,
-    caption: "PPS wait times right now",
-    captionLine2: "Real people, real workarounds.",
+    shot: "/story/explore.jpg",
+    caption: "One list, not 20 tabs",
+    captionLine2: "Housing, visa, Leap card.",
   },
   {
-    id: "knowhow",
+    id: "journey",
     startMs: 30_000,
     endMs: 37_500,
     kind: "phone",
-    tab: "explore",
-    overlay: "knowhow",
-    caption: "Get a Leap card on day one",
-    captionLine2: "Before you even unpack.",
+    shot: "/story/journey.jpg",
+    caption: "The tracker I needed on day one",
+    captionLine2: "PPS, GP, tax — on a timeline.",
   },
   {
     id: "profile",
     startMs: 37_500,
     endMs: 45_000,
     kind: "phone",
-    tab: "profile",
-    overlay: null,
-    caption: "Your Dublin identity",
+    shot: "/story/profile.jpg",
+    caption: "My Dublin identity",
     captionLine2: "City and permit — not just an email.",
   },
   {
@@ -119,10 +113,10 @@ export function storyBeatAt(ms: number): StoryBeat {
 }
 
 export function storyHomeAppearances(): number {
-  return STORY_BEATS.filter((beat) => beat.kind === "phone" && beat.tab === "home" && !beat.overlay).length;
+  return STORY_BEATS.filter((beat) => beat.kind === "phone" && beat.id === "home").length;
 }
 
 export function storyPhoneKey(beat: StoryBeat): string {
   if (beat.kind !== "phone") return beat.kind;
-  return `${beat.tab}-${beat.overlay ?? "none"}`;
+  return beat.id;
 }

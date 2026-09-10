@@ -39,36 +39,36 @@ const BEATS = [
     voice: "I kept thinking: this should exist. So I built it myself, using Claude and Cursor.",
   },
   {
-    id: "housing",
+    id: "home",
     startMs: 15_000,
     kind: "phone",
-    caption: "Southside rooms under €1,000",
-    captionLine2: "Lived listings, not Facebook spam.",
-    voice: "Southside rooms under a thousand euro — lived listings, not Facebook spam.",
+    caption: "107 days in Dublin",
+    captionLine2: "This is the app I actually use.",
+    voice: "This is my home screen — a hundred and seven days in Dublin, visa pathway set.",
   },
   {
-    id: "community",
+    id: "explore",
     startMs: 22_500,
     kind: "phone",
-    caption: "PPS wait times right now",
-    captionLine2: "Real people, real workarounds.",
-    voice: "PPS number wait times right now — real people, real workarounds.",
+    caption: "One list, not 20 tabs",
+    captionLine2: "Housing, visa, Leap card.",
+    voice: "Housing, events, Leap cards, visa — one list, not twenty tabs.",
   },
   {
-    id: "knowhow",
+    id: "journey",
     startMs: 30_000,
     kind: "phone",
-    caption: "Get a Leap card on day one",
-    captionLine2: "Before you even unpack.",
-    voice: "Get a Leap card on day one — before you even unpack.",
+    caption: "The tracker I needed on day one",
+    captionLine2: "PPS, GP, tax — on a timeline.",
+    voice: "The permit tracker I wish I'd had when I was hunting for a PPS number.",
   },
   {
     id: "profile",
     startMs: 37_500,
     kind: "phone",
-    caption: "Your Dublin identity",
+    caption: "My Dublin identity",
     captionLine2: "City and permit — not just an email.",
-    voice: "Your Dublin identity — city and permit, not just an email.",
+    voice: "My Dublin identity — city and permit, not just an email.",
   },
   {
     id: "close-copy",
@@ -179,6 +179,7 @@ async function screenshots(browser) {
       content: "nextjs-portal,[data-next-badge-root]{display:none!important}",
     });
     await page.waitForFunction(() => document.fonts.status === "loaded");
+    await page.waitForFunction(() => [...document.images].every((img) => img.complete && img.naturalWidth > 0));
     await new Promise((r) => setTimeout(r, 700));
     await page.screenshot({
       path: path.join(shotDir, `${beat.id}.png`),
@@ -205,6 +206,7 @@ async function recordVideo(browser) {
   });
   await page.goto(`${BASE}/demo/story?record=1`, { waitUntil: "domcontentloaded" });
   await page.waitForFunction(() => typeof window.__EXPAL_START_STORY === "function");
+  await page.waitForFunction(() => [...document.images].every((img) => img.complete && img.naturalWidth > 0));
   await page.evaluate(() => window.__EXPAL_START_STORY?.());
   await page.waitForSelector('[data-story-playing="true"]');
   await new Promise((r) => setTimeout(r, DURATION_MS + 500));

@@ -18,12 +18,14 @@ describe("LinkedIn personal story beats", () => {
     expect(storyBeatAt(16_000).kind).toBe("phone");
   });
 
-  it("never shows the home screen, and uses four distinct product screens", () => {
-    expect(storyHomeAppearances()).toBe(0);
+  it("uses each live screenshot once, including home only once", () => {
+    expect(storyHomeAppearances()).toBe(1);
     const phones = STORY_BEATS.filter((beat) => beat.kind === "phone");
-    expect(phones.map((beat) => beat.id)).toEqual(["housing", "community", "knowhow", "profile"]);
-    expect(phones[0]?.overlay).toBe("housing");
-    expect(phones[3]?.tab).toBe("profile");
+    expect(phones.map((beat) => beat.id)).toEqual(["home", "explore", "journey", "profile"]);
+    expect(new Set(phones.map((beat) => beat.shot)).size).toBe(4);
+    for (const beat of phones) {
+      expect(beat.shot).toMatch(/^\/story\/.+\.jpg$/);
+    }
   });
 
   it("gives the non-engineer turn a full ten seconds", () => {

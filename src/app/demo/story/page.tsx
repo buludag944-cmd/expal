@@ -2,7 +2,6 @@
 
 import { Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
-import ExpalApp from "@/mobile/ExpalApp";
 import {
   STORY_BEATS,
   STORY_DURATION_MS,
@@ -97,13 +96,10 @@ function CloseScene() {
 function PhoneBeat({ beat }: { beat: StoryBeat }) {
   return (
     <div className="story-phone-stage" data-scene={storyPhoneKey(beat)}>
-      <div className="phone-frame">
+      <div className="phone-frame is-shot">
         <div className="phone-screen">
-          <ExpalApp
-            key={storyPhoneKey(beat)}
-            initialTab={beat.tab}
-            initialOverlay={beat.overlay ?? null}
-          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="phone-shot" src={beat.shot} alt="" />
         </div>
       </div>
     </div>
@@ -155,8 +151,16 @@ function StoryInner() {
     };
   }, [previewId, recordMode]);
 
+  const shots = STORY_BEATS.filter((item) => item.shot).map((item) => item.shot as string);
+
   return (
     <div className="story-root">
+      <div className="story-preload" aria-hidden="true">
+        {shots.map((src) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img key={src} src={src} alt="" />
+        ))}
+      </div>
       <div
         className="story-stage"
         data-story-playing={playing ? "true" : "false"}
