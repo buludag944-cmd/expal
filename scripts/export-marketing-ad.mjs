@@ -120,6 +120,9 @@ async function screenshots(browser) {
   for (const beat of BEATS) {
     await page.goto(`${BASE}/demo/ad?preview=${beat.id}`, { waitUntil: "networkidle" });
     await page.waitForSelector(`[data-beat="${beat.id}"]`);
+    await page.addStyleTag({
+      content: "nextjs-portal,[data-next-badge-root]{display:none!important}",
+    });
     await page.waitForFunction(() => document.fonts.status === "loaded");
     await new Promise((r) => setTimeout(r, 900));
     await page.screenshot({
@@ -140,7 +143,14 @@ async function recordVideo(browser) {
     recordVideo: { dir: videoDir, size: { width: WIDTH, height: HEIGHT } },
   });
   const page = await context.newPage();
-  await page.goto(`${BASE}/demo/ad`, { waitUntil: "domcontentloaded" });
+  await page.addInitScript(() => {
+    const style = document.createElement("style");
+    style.textContent = "nextjs-portal,[data-next-badge-root]{display:none!important}";
+    document.documentElement.appendChild(style);
+  });
+  await page.goto(`${BASE}/demo/ad?record=1`, { waitUntil: "domcontentloaded" });
+  await page.waitForFunction(() => typeof window.__EXPAL_START_AD === "function");
+  await page.evaluate(() => window.__EXPAL_START_AD?.());
   await page.waitForSelector('[data-ad-playing="true"]');
   await new Promise((r) => setTimeout(r, DURATION_MS + 400));
   const video = page.video();
@@ -151,23 +161,42 @@ async function recordVideo(browser) {
   return videoPath;
 }
 
-function srtTimestamp(ms) {
+function assTimestamp(ms) {
   const clamped = Math.max(0, ms);
   const hours = Math.floor(clamped / 3_600_000);
   const minutes = Math.floor((clamped % 3_600_000) / 60_000);
   const seconds = Math.floor((clamped % 60_000) / 1000);
-  const millis = clamped % 1000;
+  const cs = Math.floor((clamped % 1000) / 10);
   const pad = (n, w = 2) => String(n).padStart(w, "0");
-  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)},${pad(millis, 3)}`;
+  return `${hours}:${pad(minutes)}:${pad(seconds)}.${pad(cs)}`;
 }
 
-async function writeSrt() {
-  const lines = BEATS.map((beat, index) => {
-    const end = BEATS[index + 1]?.startMs ?? DURATION_MS;
-    return `${index + 1}\n${srtTimestamp(beat.startMs + 80)} --> ${srtTimestamp(end)}\n${beat.caption}\n`;
-  });
-  const file = path.join(OUT_DIR, "captions.srt");
-  await writeFile(file, `${lines.join("\n")}\n`);
+async function writeAss() {
+  const events = BEATS.filter((beat) => beat.id !== "cta")
+    .map((beat, index, list) => {
+      const end = list[index + 1]?.startMs ?? 22_000;
+      return `Dialogue: 0,${assTimestamp(beat.startMs + 60)},${assTimestamp(end)},Default,,0,0,0,,${beat.caption}`;
+    })
+    .join("\n");
+  const file = path.join(OUT_DIR, "captions.ass");
+  await writeFile(
+    file,
+    `\uFEFF[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Liberation Sans,52,&H00FFFFFF,&H000000FF,&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,5,2,2,48,48,96,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+${events}
+`,
+  );
   return file;
 }
 
@@ -229,8 +258,9 @@ bed.export("${path.join(voiceDir, "narration.mp3")}", format="mp3", bitrate="192
   }
 }
 
-async function transcode(rawVideo, narration) {
+async function transcode(rawVideo, narration, assFile) {
   const silent = path.join(OUT_DIR, "expal_marketing_9x16_silent.mp4");
+  const assPath = assFile.replace(/\\/g, "/").replace(/:/g, "\\:");
   await run("ffmpeg", [
     "-y",
     "-i",
@@ -238,7 +268,7 @@ async function transcode(rawVideo, narration) {
     "-t",
     "28.00",
     "-vf",
-    "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,fps=30,format=yuv420p",
+    `scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,fps=30,subtitles=${assPath},format=yuv420p`,
     "-c:v",
     "libx264",
     "-preset",
@@ -266,7 +296,7 @@ async function transcode(rawVideo, narration) {
       "-i",
       narration,
       "-filter_complex",
-      "[1:a]aresample=44100,aformat=sample_fmts=fltp:channel_layouts=stereo,loudnorm=I=-14:TP=-1.5:LRA=11,afade=t=in:st=0:d=0.08,afade=t=out:st=27.4:d=0.5[a]",
+      "[1:a]aresample=44100,aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,loudnorm=I=-14:TP=-1.5:LRA=11,afade=t=in:st=0:d=0.08,afade=t=out:st=27.4:d=0.5[a]",
       "-map",
       "0:v",
       "-map",
@@ -277,6 +307,10 @@ async function transcode(rawVideo, narration) {
       "aac",
       "-b:a",
       "192k",
+      "-ar",
+      "44100",
+      "-ac",
+      "2",
       "-shortest",
       "-movflags",
       "+faststart",
@@ -326,12 +360,12 @@ async function main() {
   await mkdir(OUT_DIR, { recursive: true });
   const stop = await ensureServer();
   try {
-    await writeSrt();
+    await writeAss();
     await withBrowser(async (browser) => {
       await screenshots(browser);
       const raw = await recordVideo(browser);
       const narration = await tryNarration();
-      const { silent, finalPath } = await transcode(raw, narration);
+      const { silent, finalPath } = await transcode(raw, narration, path.join(OUT_DIR, "captions.ass"));
       const artifact = await copyArtifacts(finalPath, silent);
       const info = await probe(finalPath);
       await writeFile(path.join(OUT_DIR, "probe.json"), JSON.stringify(info, null, 2));

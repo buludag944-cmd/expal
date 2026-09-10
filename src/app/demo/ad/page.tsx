@@ -6,6 +6,12 @@ import ExpalApp from "@/mobile/ExpalApp";
 import { AD_BEATS, AD_DURATION_MS, beatAt, phoneScreenKey, type AdBeat } from "@/mobile/ad-beats";
 import "@/mobile/ad-studio.css";
 
+declare global {
+  interface Window {
+    __EXPAL_START_AD?: () => void;
+  }
+}
+
 function HookScene() {
   return (
     <div className="hook" data-scene="hook">
@@ -19,7 +25,7 @@ function HookScene() {
             </span>
             dublin housing facebook
           </header>
-          <p>14,002 members · “any rooms, no Irish guarantor??”</p>
+          <p>14,002 members · no Irish guarantor</p>
         </article>
         <article className="fake-tab t2">
           <header>
@@ -75,11 +81,12 @@ function CtaScene({ caption }: { caption: string }) {
 function MarketingAdInner() {
   const params = useSearchParams();
   const previewId = params.get("preview");
+  const recordMode = params.get("record") === "1";
   const [elapsed, setElapsed] = useState(() => {
     const preview = AD_BEATS.find((beat) => beat.id === previewId);
     return preview ? preview.startMs + 80 : 0;
   });
-  const [playing, setPlaying] = useState(!previewId);
+  const [playing, setPlaying] = useState(!previewId && !recordMode);
 
   const beat = useMemo(() => beatAt(elapsed), [elapsed]);
 
@@ -91,30 +98,45 @@ function MarketingAdInner() {
       return;
     }
 
+    let started = false;
     let frame = 0;
-    const start = performance.now();
-    setPlaying(true);
-    const tick = (now: number) => {
-      const next = Math.min(now - start, AD_DURATION_MS);
-      setElapsed(next);
-      if (next < AD_DURATION_MS) frame = requestAnimationFrame(tick);
+    const startNow = () => {
+      if (started) return;
+      started = true;
+      const origin = performance.now();
+      setPlaying(true);
+      const tick = (now: number) => {
+        const next = Math.min(now - origin, AD_DURATION_MS);
+        setElapsed(next);
+        if (next < AD_DURATION_MS) frame = requestAnimationFrame(tick);
+      };
+      frame = requestAnimationFrame(tick);
     };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [previewId]);
+
+    window.__EXPAL_START_AD = startNow;
+    document.documentElement.dataset.adReady = "true";
+    const fallback = recordMode ? undefined : window.setTimeout(startNow, 40);
+
+    return () => {
+      if (fallback) window.clearTimeout(fallback);
+      cancelAnimationFrame(frame);
+      delete window.__EXPAL_START_AD;
+    };
+  }, [previewId, recordMode]);
 
   return (
     <div className="ad-root">
       <div
         className="ad-stage"
         data-ad-playing={playing ? "true" : "false"}
+        data-ad-ready="true"
         data-beat={beat.id}
         data-kind={beat.kind}
       >
         {beat.kind === "hook" ? <HookScene /> : null}
         {beat.kind === "phone" ? <PhoneBeat beat={beat} /> : null}
         {beat.kind === "cta" ? <CtaScene caption={beat.caption} /> : null}
-        {beat.kind !== "cta" ? (
+        {beat.kind !== "cta" && !recordMode ? (
           <p className={`ad-caption${beat.kind === "hook" ? " is-hook" : ""}`}>{beat.caption}</p>
         ) : null}
       </div>

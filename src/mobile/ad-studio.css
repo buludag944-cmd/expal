@@ -6,6 +6,12 @@ body:has(.ad-root) {
   background: #09070a;
 }
 
+html:has(.ad-root) nextjs-portal,
+body:has(.ad-root) [data-next-badge-root],
+body:has(.ad-root) [data-next-mark-loading] {
+  display: none !important;
+}
+
 .ad-root {
   position: fixed;
   inset: 0;
@@ -114,6 +120,7 @@ body:has(.ad-root) {
   bottom: auto;
   top: 58%;
   font-size: 58px;
+  animation: none;
 }
 
 .ad-stage[data-ad-playing="false"] .phone-frame,
@@ -186,33 +193,33 @@ body:has(.ad-root) {
 
 .fake-tab.t1 {
   top: 0;
-  left: 20px;
-  transform: rotate(-7deg);
-  animation-delay: 0ms;
+  left: 48px;
+  transform: rotate(-6deg);
+  animation: none;
   z-index: 1;
 }
 
 .fake-tab.t2 {
-  top: 150px;
-  left: 160px;
-  transform: rotate(5deg);
-  animation-delay: 180ms;
+  top: 168px;
+  left: 148px;
+  transform: rotate(4deg);
+  animation-delay: 160ms;
   z-index: 2;
 }
 
 .fake-tab.t3 {
-  top: 310px;
-  left: 40px;
+  top: 336px;
+  left: 28px;
   transform: rotate(-3deg);
-  animation-delay: 360ms;
+  animation-delay: 320ms;
   z-index: 3;
 }
 
 .fake-tab.t4 {
-  top: 460px;
-  left: 190px;
-  transform: rotate(8deg);
-  animation-delay: 520ms;
+  top: 504px;
+  left: 168px;
+  transform: rotate(6deg);
+  animation-delay: 460ms;
   z-index: 4;
 }
 
