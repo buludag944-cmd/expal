@@ -86,6 +86,14 @@ npm run export:ad
 
 Writes `expal_marketing_play_tiktok_9x16.mp4` (does not overwrite the full demo file).
 
+## LinkedIn personal story (4:5)
+
+Bahar’s first-person cut is a **separate** 58-second export from `/demo/story` (1080×1350). It does not overwrite the full demo, the 9:16 social cut, or any other LinkedIn file.
+
+```bash
+npm run export:story
+```
+
 ## Scripts
 
 ```bash
@@ -93,5 +101,6 @@ npm test
 npm run build
 npm start
 npm run export:ad
+npm run export:story
 ```
 
