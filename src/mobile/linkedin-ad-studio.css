@@ -211,6 +211,27 @@ body:has(.lm-root) [data-next-mark-loading] {
   object-position: top center;
 }
 
+.lm-caption {
+  position: absolute;
+  left: 56px;
+  right: 56px;
+  bottom: 56px;
+  margin: 0;
+  z-index: 8;
+  text-align: center;
+  font-family: Arial, Helvetica, ui-sans-serif, sans-serif;
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+  color: #fff;
+  -webkit-text-stroke: 6px #000;
+  paint-order: stroke fill;
+  text-shadow:
+    0 3px 0 #000,
+    0 8px 18px rgba(0, 0, 0, 0.4);
+}
+
 .lm-caption small {
   display: block;
   margin-top: 8px;
