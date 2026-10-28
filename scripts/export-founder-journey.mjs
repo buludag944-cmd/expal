@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Render FounderNotes: LinkedIn 4:5, 70s, no generated voice.
- * Bahar records src/video/founder-journey-voiceover.txt herself.
+ * Render FounderNotes: LinkedIn 4:5, cut to the recorded voiceover.
+ * Audio is public/journey/voice.m4a (already inside the composition).
  * Does not overwrite the short, the ads, or the personal story.
  */
 import { spawn } from "node:child_process";
@@ -11,16 +11,21 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const FPS = 30;
-const DURATION_MS = 70_000;
+const DURATION_SEC = 140.8;
 const WIDTH = 1080;
 const HEIGHT = 1350;
 
 const STILLS = [
-  ["welcome", 80],
-  ["map", 480],
-  ["layout", 1_020],
-  ["backend", 1_560],
-  ["close", 1_960],
+  ["welcome", 2],
+  ["ireland", 10],
+  ["map", 32],
+  ["journal", 37],
+  ["visa", 43],
+  ["community", 48],
+  ["layout", 66],
+  ["phone", 73],
+  ["backend", 95],
+  ["close", 137],
 ];
 
 const OUT_DIR = process.env.JOURNEY_OUT_DIR || "/tmp/expal-journey";
@@ -83,22 +88,19 @@ async function renderSilent() {
   return silent;
 }
 
-async function stills() {
+async function stills(video) {
   const shotDir = path.join(OUT_DIR, "frames");
   await mkdir(shotDir, { recursive: true });
-  for (const [id, frame] of STILLS) {
-    await run("npx", [
-      "remotion",
-      "still",
-      ENTRY,
-      "FounderNotes",
+  for (const [id, seconds] of STILLS) {
+    await run("ffmpeg", [
+      "-y",
+      "-ss",
+      String(seconds),
+      "-i",
+      video,
+      "-frames:v",
+      "1",
       path.join(shotDir, `${id}.png`),
-      "--frame",
-      String(frame),
-      "--browser-executable",
-      CHROME,
-      "--gl",
-      "angle",
     ]);
   }
 }
@@ -109,16 +111,6 @@ async function encodeDelivery(video) {
     "-y",
     "-i",
     video,
-    "-f",
-    "lavfi",
-    "-t",
-    "70",
-    "-i",
-    "anullsrc=r=44100:cl=stereo",
-    "-map",
-    "0:v:0",
-    "-map",
-    "1:a:0",
     "-vf",
     `scale=${WIDTH}:${HEIGHT}:flags=lanczos,fps=30,format=yuv420p`,
     "-c:v",
@@ -138,12 +130,11 @@ async function encodeDelivery(video) {
     "-c:a",
     "aac",
     "-b:a",
-    "64k",
+    "192k",
     "-ar",
-    "44100",
+    "48000",
     "-ac",
     "2",
-    "-shortest",
     "-movflags",
     "+faststart",
     finalPath,
@@ -180,8 +171,8 @@ async function probe(file) {
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
   const picture = await renderSilent();
-  await stills();
   const finalPath = await encodeDelivery(picture);
+  await stills(finalPath);
   const artifact = await copyArtifacts(finalPath);
   const info = await probe(finalPath);
   await writeFile(path.join(OUT_DIR, "probe.json"), JSON.stringify(info, null, 2));
@@ -190,11 +181,12 @@ async function main() {
   if (!video || video.width !== WIDTH || video.height !== HEIGHT) {
     throw new Error(`Unexpected frame size: ${video?.width}x${video?.height}`);
   }
-  if (Number(video.duration) < 69.9 || Number(video.duration) > 70.1) {
-    throw new Error(`Expected 70s, got ${video.duration}`);
+  const duration = Number(video.duration);
+  if (duration < DURATION_SEC - 0.2 || duration > DURATION_SEC + 0.2) {
+    throw new Error(`Expected ${DURATION_SEC}s, got ${video.duration}`);
   }
-  if (!audio) throw new Error("Delivery file needs a silent audio bed for the edit.");
-  console.log(JSON.stringify({ artifact, finalPath, fps: FPS, durationMs: DURATION_MS, info }, null, 2));
+  if (!audio) throw new Error("Delivery file is missing the recorded voiceover.");
+  console.log(JSON.stringify({ artifact, finalPath, fps: FPS, durationSec: DURATION_SEC, info }, null, 2));
 }
 
 main().catch((err) => {

@@ -96,7 +96,7 @@ npm run export:story
 
 ## Founder's journey, episode 01 (LinkedIn 4:5)
 
-A separate 70-second lesson, `FounderNotes`. It opens “Welcome to Vibe-coder's Journey,” then how the product was mapped, the phone-versus-desktop layout bugs, and the backend bugs (accounts wiped on redeploy, Google sign-in dropping the profile). The picture cut is silent. Bahar records `src/video/founder-journey-voiceover.txt`. It does not overwrite the short, the ads, or the personal story.
+A separate lesson, `FounderNotes`, cut to the recorded voiceover (about 2 minutes 21 seconds). It opens “Welcome to Vibe-coder's Journey,” then how the product was mapped, the phone-versus-desktop layout bugs, and the backend bugs (accounts wiped on redeploy, Google sign-in added with Firebase). Picture is product screenshots. The voice is `public/journey/voice.m4a`. The transcript is `src/video/founder-journey-voiceover.txt`. It does not overwrite the short, the ads, or the personal story.
 
 ```bash
 npm run export:journey

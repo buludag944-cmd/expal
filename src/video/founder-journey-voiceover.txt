@@ -1,35 +1,29 @@
-Vibe-coder's Journey — episode 01
-Record this yourself. The picture is 70 seconds and has no voice.
-Start each block when the card changes.
+Vibe-coder's Journey · episode 01
+Cleaned voiceover. One false start was removed: after "I put them in the real database" the line "so a restart doesn't wipe" was begun twice and dropped. The take that stays is "So a restart doesn't wipe anymore."
 
-0:00
-Welcome to Vibe-coder's Journey.
-How I mapped EXPal, the phone layout, and the backend.
-
-0:08
-I mapped the product before the screens.
-A public page, no login, and a journal I can post.
-Then the move itself.
-Housing. Visa and IRP. PPS. Community. Referrals. A job tracker.
-Home, Explore, Community, Journey, Profile.
-
-0:26
-Desktop was fine. The phone wasn't.
-Job tracker popups opened off the page.
-On the phone, forms hid under the tabs, and chat covered Send.
-I pinned them to the screen you can actually see.
-
-0:44
-Then the backend.
-Accounts disappeared every time I redeployed.
-I put them in a real database, so a restart doesn't wipe anyone.
-Google sign-in also forgot the profile.
-I read it back after login.
-
-1:02
-That's the map, the phone, and the server.
-Relocate smarter.
-Settle faster.
-Thrive longer.
-
-1:10 end
+0:00  Hello. Welcome to Vibe-coder's Journey.
+0:04  This is a tutorial series about me building the app EXPal,
+0:09  a relocation guide for expats in Ireland.
+0:13  Throughout the journey, I'm going to explain which bugs I faced and how I fixed them.
+0:20  So the first thing that I started is how I mapped EXPal, the phone layout, and the backend as a problem.
+0:30  First of all, I mapped the product before the screens.
+0:34  A public page, no login, and a journal I can post.
+0:38  Then the move itself. Housing, visa, IRP, and PPS.
+0:46  The community part, which was the most important and crucial part,
+0:50  along with referrals.
+0:53  Then a job tracker.
+0:54  The journey comes along with Home, Explore, Community, Journey, and Profile.
+1:02  The second problem was the layout.
+1:05  Desktop was fine. The phone wasn't.
+1:08  Job tracker pop-ups opened off the page.
+1:12  On the phone, the forms hid under the tabs, and the chat covered Send.
+1:17  I pinned them to the screen that you can actually see.
+1:22  Then finally the backend, which was the most crucial problem if you don't know how to build or how to code.
+1:31  Accounts disappeared every time I redeployed.
+1:34  I put them in the real database.
+1:36  So a restart doesn't wipe anymore.
+1:42  Google sign-in, also the crucial part that I forgot to add.
+1:47  For this case, I learned how to integrate Firebase to my account, just to provide people with the option of signing in with their Google accounts.
+2:01  That's the map, the phone, and the server.
+2:05  I would say I will continue on this series, and with EXPal you can see how building an app starts with an easy idea.
+2:14  EXPal. Relocate smarter, settle faster, and thrive longer.
