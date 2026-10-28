@@ -94,6 +94,14 @@ Bahar’s first-person cut is a **separate** 58-second export from `/demo/story`
 npm run export:story
 ```
 
+## Founder's journey, episode 01 (LinkedIn 4:5)
+
+A separate 97-second lesson, `FounderNotes`, on how the product was mapped and which bugs not to repeat: the login wall, Gmail on the public profile, and cropping a wide recording into a phone. It does not overwrite the short, the ads, or the personal story.
+
+```bash
+npm run export:journey
+```
+
 ## Scripts
 
 ```bash
@@ -102,5 +110,6 @@ npm run build
 npm start
 npm run export:ad
 npm run export:story
+npm run export:journey
 ```
 
