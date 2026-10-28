@@ -16,10 +16,10 @@ const WIDTH = 1080;
 const HEIGHT = 1350;
 
 const STILLS = [
-  ["welcome", 90],
-  ["login", 560],
-  ["profile", 1_080],
-  ["layout", 1_560],
+  ["welcome", 80],
+  ["map", 480],
+  ["layout", 1_020],
+  ["backend", 1_560],
   ["close", 1_960],
 ];
 

@@ -7,7 +7,6 @@ import {
   JOURNEY_HEIGHT,
   JOURNEY_WIDTH,
   journeyBeatAtFrame,
-  splitVoiceSentences,
 } from "./journey-beats";
 
 describe("EXPal founder journey beats", () => {
@@ -17,13 +16,6 @@ describe("EXPal founder journey beats", () => {
     expect(JOURNEY_HEIGHT).toBe(1350);
     expect(JOURNEY_DURATION_IN_FRAMES).toBe(2_100);
     expect(JOURNEY_DURATION_MS).toBe(70_000);
-  });
-
-  it("splits the spoken script on sentence boundaries", () => {
-    expect(splitVoiceSentences("First problem. The journal stays open.")).toEqual([
-      "First problem.",
-      "The journal stays open.",
-    ]);
   });
 
   it("fills the timeline without gaps", () => {
@@ -37,32 +29,28 @@ describe("EXPal founder journey beats", () => {
     }
   });
 
-  it("opens the series, then three problems with a fix, then the motto", () => {
+  it("covers the feature map, phone versus desktop, then the backend", () => {
     expect(JOURNEY_BEATS.map((beat) => beat.id)).toEqual([
       "welcome",
-      "login",
-      "profile",
+      "map",
       "layout",
+      "backend",
       "close",
     ]);
     expect(journeyBeatAtFrame(0).voice).toMatch(/Welcome to Vibe-coder's Journey/);
-    expect(journeyBeatAtFrame(400).voice).toMatch(/First problem/);
-    expect(journeyBeatAtFrame(400).captionLine2).toMatch(/journal stays open/);
-    expect(journeyBeatAtFrame(1_000).voice).toMatch(/Second problem/);
-    expect(journeyBeatAtFrame(1_000).captionLine2).toMatch(/work permit/);
-    expect(journeyBeatAtFrame(1_500).voice).toMatch(/Third problem/);
-    expect(journeyBeatAtFrame(1_500).captionLine2).toMatch(/captions/);
-    expect(JOURNEY_BEATS.at(-1)?.captionLine2).toMatch(/Thrive longer/);
-    expect(JOURNEY_BEATS.at(-1)?.voice).toMatch(/Three problems\. Three fixes/);
+    expect(journeyBeatAtFrame(400).voice).toMatch(/mapped the product before the screens/);
+    expect(journeyBeatAtFrame(400).voice).toMatch(/Housing\. Visa and IRP\. PPS/);
+    expect(journeyBeatAtFrame(900).voice).toMatch(/Desktop was fine/);
+    expect(journeyBeatAtFrame(900).voice).toMatch(/pinned them/);
+    expect(journeyBeatAtFrame(1_500).voice).toMatch(/redeployed/);
+    expect(journeyBeatAtFrame(1_500).voice).toMatch(/real database/);
+    expect(journeyBeatAtFrame(1_500).voice).toMatch(/forgot the profile/);
+    expect(JOURNEY_BEATS.at(-1)?.voice).toMatch(/Relocate smarter\. Settle faster\. Thrive longer/);
   });
 
   it("keeps a real email address and the retired tagline out of the script", () => {
     const blob = JSON.stringify(JOURNEY_BEATS);
     expect(blob).not.toMatch(/uludag944|@gmail\.com/i);
     expect(blob).not.toMatch(/Move\. Settle\. Connect/);
-    expect(blob).toMatch(/problems I faced/);
-    expect(blob).toMatch(/I took it off/);
-    expect(blob).toMatch(/real screen never had/);
-    expect(blob).toMatch(/LinkedIn is on mute/);
   });
 });

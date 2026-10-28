@@ -63,7 +63,7 @@ function Caption({ beat, onDark = false }: { beat: JourneyBeat; onDark?: boolean
           margin: 0,
           fontFamily: font,
           fontWeight: 800,
-          fontSize: 38,
+          fontSize: 36,
           lineHeight: 1.18,
           letterSpacing: "-0.03em",
           color: "#fff",
@@ -119,231 +119,83 @@ function Shell({
   );
 }
 
-function GateCard({
-  tone,
-  label,
+function MapRow({
+  n,
   title,
-  lines,
+  detail,
   delay,
 }: {
-  tone: "before" | "after";
-  label: string;
+  n: string;
   title: string;
-  lines: string[];
+  detail: string;
   delay: number;
 }) {
-  const bad = tone === "before";
   return (
     <div
       style={{
         ...rise(delay),
-        flex: 1,
-        borderRadius: 28,
-        padding: "22px 22px 26px",
-        background: bad ? "#f3eeea" : "#fff",
-        border: bad ? "2px solid #e4d8d2" : `3px solid ${ink}`,
-        boxShadow: bad ? "none" : "0 12px 28px rgba(26,18,16,0.08)",
+        display: "flex",
+        gap: 18,
+        alignItems: "center",
+        background: "#fff",
+        borderRadius: 20,
+        padding: "16px 20px",
+        marginTop: 12,
       }}
     >
       <span
         style={{
-          display: "inline-block",
-          padding: "6px 12px",
-          borderRadius: 999,
-          background: bad ? "#c9b8b2" : sky,
-          color: bad ? "#fff" : ink,
-          fontSize: 18,
+          width: 52,
+          height: 52,
+          borderRadius: 14,
+          background: coral,
+          color: "#fff",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           fontWeight: 800,
-          letterSpacing: "0.08em",
+          fontSize: 22,
+          flexShrink: 0,
         }}
       >
-        {label}
+        {n}
       </span>
-      <b
-        style={{
-          display: "block",
-          marginTop: 18,
-          fontSize: 32,
-          letterSpacing: "-0.03em",
-          color: bad ? mute : ink,
-        }}
-      >
-        {title}
-      </b>
-      {lines.map((line) => (
-        <span
-          key={line}
-          style={{
-            display: "block",
-            marginTop: 8,
-            fontSize: 24,
-            lineHeight: 1.3,
-            color: bad ? "#8a7d76" : ink,
-            fontWeight: bad ? 600 : 700,
-          }}
-        >
-          {line}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-function MiniPhone({
-  clipped,
-  delay,
-}: {
-  clipped: boolean;
-  delay: number;
-}) {
-  return (
-    <div style={{ ...rise(delay), width: 360 }}>
-      <div
-        style={{
-          fontSize: 20,
-          fontWeight: 800,
-          letterSpacing: "0.12em",
-          color: clipped ? coral : "#1d8a3a",
-          marginBottom: 12,
-        }}
-      >
-        {clipped ? "PROBLEM" : "FIXED"}
-      </div>
-      <div
-        style={{
-          height: 520,
-          borderRadius: 36,
-          background: "#111",
-          padding: clipped ? 0 : 10,
-          overflow: "hidden",
-          position: "relative",
-          boxShadow: "0 16px 30px rgba(26,18,16,0.16)",
-        }}
-      >
-        <div
-          style={{
-            height: "100%",
-            borderRadius: clipped ? 0 : 28,
-            background: paper,
-            overflow: "hidden",
-            position: "relative",
-          }}
-        >
-          <div
-            style={{
-              width: clipped ? 460 : "100%",
-              marginLeft: clipped ? -70 : 0,
-              padding: "22px 18px 0",
-            }}
-          >
-            <div style={{ height: 10, width: 90, borderRadius: 99, background: "#111", margin: "0 auto 18px" }} />
-            <b style={{ fontSize: 28, letterSpacing: "-0.03em" }}>Home</b>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 16 }}>
-              {["Housing", "Visa", "Community", "Referrals", "Rights", "Events"].map((item) => (
-                <span
-                  key={item}
-                  style={{
-                    width: clipped ? 120 : "47%",
-                    padding: "14px 10px",
-                    borderRadius: 14,
-                    background: "#fff",
-                    fontSize: 16,
-                    fontWeight: 800,
-                  }}
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-          </div>
-          {clipped ? (
-            <span
-              style={{
-                position: "absolute",
-                left: 8,
-                top: 250,
-                fontSize: 22,
-                fontWeight: 800,
-                color: coral,
-              }}
-            >
-              …without
-            </span>
-          ) : (
-            <div
-              style={{
-                position: "absolute",
-                left: 16,
-                right: 16,
-                bottom: 72,
-                background: ink,
-                color: "#fff",
-                borderRadius: 14,
-                padding: "10px 12px",
-                fontSize: 16,
-                fontWeight: 800,
-              }}
-            >
-              Captions on
-            </div>
-          )}
-          <div
-            style={{
-              position: "absolute",
-              left: 0,
-              right: clipped ? -40 : 0,
-              bottom: 0,
-              height: 54,
-              background: "#fff",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-around",
-              fontSize: 13,
-              fontWeight: 800,
-              color: mute,
-              borderTop: "1px solid #efe4de",
-            }}
-          >
-            <span style={{ color: coral }}>Home</span>
-            <span>Explore</span>
-            <span>Community</span>
-            <span>Journey</span>
-            <span>Profile</span>
-          </div>
-        </div>
-      </div>
+      <span>
+        <b style={{ display: "block", fontSize: 30, letterSpacing: "-0.03em" }}>{title}</b>
+        <span style={{ display: "block", marginTop: 2, fontSize: 22, color: mute }}>{detail}</span>
+      </span>
     </div>
   );
 }
 
 function WelcomeScene({ beat }: { beat: JourneyBeat }) {
-  const problems = ["01  Login wall", "02  Gmail on the profile", "03  The phone frame"];
+  const parts = ["01  How I mapped the features", "02  Phone layout vs desktop", "03  Backend bugs, and the fix"];
   return (
     <AbsoluteFill style={{ background: coral, fontFamily: font, color: "#fff" }}>
       <div style={{ padding: "56px 64px 0" }}>
         <SeriesMark light />
-        <p style={{ ...rise(4), margin: "64px 0 0", fontSize: 28, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" }}>
+        <p style={{ ...rise(4), margin: "56px 0 0", fontSize: 26, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" }}>
           Episode 01
         </p>
-        <h1 style={{ ...rise(8), margin: "16px 0 0", fontSize: 92, lineHeight: 0.96, letterSpacing: "-0.045em", fontWeight: 800 }}>
+        <h1 style={{ ...rise(8), margin: "14px 0 0", fontSize: 84, lineHeight: 0.96, letterSpacing: "-0.045em", fontWeight: 800 }}>
           Welcome.
         </h1>
-        <p style={{ ...rise(16), margin: "28px 0 0", maxWidth: 860, fontSize: 40, lineHeight: 1.25, fontWeight: 700 }}>
-          A series on how I built my app, and the problems I faced.
+        <p style={{ ...rise(16), margin: "24px 0 0", maxWidth: 880, fontSize: 36, lineHeight: 1.25, fontWeight: 700 }}>
+          How I built EXPal. The map, the phone, and the server.
         </p>
-        <div style={{ marginTop: 36 }}>
-          {problems.map((problem, index) => (
+        <div style={{ marginTop: 40 }}>
+          {parts.map((part, index) => (
             <p
-              key={problem}
+              key={part}
               style={{
-                ...rise(24 + index * 6),
-                margin: index === 0 ? 0 : "14px 0 0",
+                ...rise(22 + index * 6),
+                margin: index === 0 ? 0 : "16px 0 0",
                 fontSize: 32,
                 fontWeight: 800,
                 letterSpacing: "-0.03em",
               }}
             >
-              {problem}
+              {part}
             </p>
           ))}
         </div>
@@ -353,100 +205,37 @@ function WelcomeScene({ beat }: { beat: JourneyBeat }) {
   );
 }
 
-function LoginScene({ beat }: { beat: JourneyBeat }) {
+function MapScene({ beat }: { beat: JourneyBeat }) {
+  const chips = ["Housing", "Visa / IRP", "PPS", "Community", "Referrals", "Job tracker"];
   return (
     <Shell beat={beat}>
       <Kicker>{beat.kicker}</Kicker>
-      <h1 style={{ ...rise(2), margin: 0, fontSize: 54, lineHeight: 1.05, letterSpacing: "-0.045em" }}>
-        Everyone landed on login.
+      <h1 style={{ ...rise(2), margin: 0, fontSize: 52, lineHeight: 1.02, letterSpacing: "-0.04em" }}>
+        The move, written down first.
       </h1>
-      <div style={{ display: "flex", gap: 18, marginTop: 28 }}>
-        <GateCard
-          tone="before"
-          label="PROBLEM"
-          title="Sign in to continue"
-          lines={["The old site opened on login.", "Nothing to land on."]}
-          delay={10}
-        />
-        <GateCard
-          tone="after"
-          label="FIX"
-          title="Journal stays open"
-          lines={["You can read it straight away.", "Account only when you want one."]}
-          delay={18}
-        />
-      </div>
-      <p style={{ ...rise(30), margin: "26px 0 0", fontSize: 28, fontWeight: 700, lineHeight: 1.35 }}>
-        I fixed that. If you can't land, you can't be found.
-      </p>
-    </Shell>
-  );
-}
-
-function ProfileScene({ beat }: { beat: JourneyBeat }) {
-  return (
-    <Shell beat={beat}>
-      <Kicker>{beat.kicker}</Kicker>
-      <h1 style={{ ...rise(2), margin: 0, fontSize: 52, lineHeight: 1.05, letterSpacing: "-0.045em" }}>
-        Gmail was sitting on the profile.
-      </h1>
-      <div
-        style={{
-          ...rise(12),
-          marginTop: 28,
-          background: "#fff",
-          borderRadius: 32,
-          padding: "28px 28px 24px",
-          boxShadow: "0 14px 32px rgba(26,18,16,0.06)",
-        }}
-      >
-        <div style={{ display: "flex", gap: 18, alignItems: "center" }}>
-          <div
+      <MapRow n="01" title="Public page" detail="People land with no login" delay={8} />
+      <MapRow n="02" title="A journal I can post" detail="Guides, before an account" delay={14} />
+      <MapRow n="03" title="Same Google sign-in" detail="The account comes after the door" delay={20} />
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 18 }}>
+        {chips.map((label, index) => (
+          <span
+            key={label}
             style={{
-              width: 84,
-              height: 84,
-              borderRadius: 28,
-              background: coral,
-              color: "#fff",
-              fontSize: 40,
+              ...rise(28 + index * 3),
+              padding: "10px 16px",
+              borderRadius: 999,
+              background: "#fff",
+              border: `2px solid ${ink}`,
+              fontSize: 22,
               fontWeight: 800,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
             }}
           >
-            B
-          </div>
-          <div>
-            <b style={{ fontSize: 36, letterSpacing: "-0.03em" }}>Bahar</b>
-            <span style={{ display: "block", marginTop: 4, fontSize: 26, fontWeight: 800 }}>
-              Dublin · Work permit
-            </span>
-          </div>
-        </div>
-        <div
-          style={{
-            marginTop: 22,
-            padding: "16px 18px",
-            borderRadius: 18,
-            background: "#fff1ef",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 16,
-          }}
-        >
-          <span style={{ color: coral, fontSize: 28, fontWeight: 800, textDecoration: "line-through" }}>
-            name@gmail.com
+            {label}
           </span>
-          <span style={{ color: coral, fontSize: 18, fontWeight: 800, letterSpacing: "0.08em" }}>REMOVED</span>
-        </div>
-        <p style={{ margin: "14px 0 0", fontSize: 24, color: mute, fontWeight: 700 }}>
-          The fix: I took the email off. Dublin and a work permit stayed.
-        </p>
+        ))}
       </div>
-      <p style={{ ...rise(28), margin: "22px 0 0", fontSize: 28, fontWeight: 800, lineHeight: 1.35 }}>
-        I also cut the line the real screen never had.
+      <p style={{ ...rise(48), margin: "16px 0 0", fontSize: 22, color: mute, fontWeight: 700 }}>
+        Home · Explore · Community · Journey · Profile
       </p>
     </Shell>
   );
@@ -456,22 +245,76 @@ function LayoutScene({ beat }: { beat: JourneyBeat }) {
   return (
     <Shell beat={beat}>
       <Kicker>{beat.kicker}</Kicker>
-      <h1 style={{ ...rise(2), margin: "0 0 8px", fontSize: 48, lineHeight: 1.05, letterSpacing: "-0.045em" }}>
-        The menu fell off the phone.
+      <h1 style={{ ...rise(2), margin: 0, fontSize: 48, lineHeight: 1.05, letterSpacing: "-0.04em" }}>
+        Fine on a desk. Broken on a phone.
       </h1>
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 12 }}>
-        <MiniPhone clipped delay={8} />
-        <MiniPhone clipped={false} delay={16} />
+      <div style={{ display: "flex", gap: 18, marginTop: 22 }}>
+        <div style={{ ...rise(8), flex: 1.15, background: "#fff", borderRadius: 24, padding: 18 }}>
+          <b style={{ fontSize: 18, letterSpacing: "0.1em", color: "#1d8a3a" }}>DESKTOP</b>
+          <div style={{ marginTop: 14, height: 250, borderRadius: 16, background: paper, border: "2px solid #efe4de", position: "relative" }}>
+            <div style={{ height: 28, background: "#fff", borderBottom: "1px solid #efe4de" }} />
+            <div style={{ position: "absolute", left: 24, top: 70, width: 180, padding: 12, borderRadius: 12, background: "#fff", border: `2px solid ${ink}`, fontSize: 16, fontWeight: 800 }}>
+              Add a job
+              <span style={{ display: "block", marginTop: 8, color: mute, fontWeight: 700 }}>On the screen</span>
+            </div>
+          </div>
+        </div>
+        <div style={{ ...rise(14), flex: 0.85, background: "#fff", borderRadius: 24, padding: 18 }}>
+          <b style={{ fontSize: 18, letterSpacing: "0.1em", color: coral }}>PHONE</b>
+          <div style={{ marginTop: 14, height: 250, borderRadius: 28, background: "#111", padding: 8, overflow: "hidden" }}>
+            <div style={{ height: "100%", borderRadius: 22, background: paper, position: "relative", overflow: "hidden" }}>
+              <div style={{ position: "absolute", left: 10, right: -30, top: 36, padding: 10, borderRadius: 12, background: "#fff", border: `2px solid ${coral}`, fontSize: 15, fontWeight: 800, color: coral }}>
+                Popup off the edge
+              </div>
+              <div style={{ position: "absolute", right: 10, bottom: 52, width: 36, height: 36, borderRadius: 18, background: coral }} />
+              <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 42, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 800 }}>
+                Tabs cover Send
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      <p style={{ ...rise(24), margin: "18px 0 0", fontSize: 26, fontWeight: 800, lineHeight: 1.3 }}>
+        The fix: pin dialogs, sheets, and the chat button to the screen you can see.
+      </p>
+    </Shell>
+  );
+}
+
+function BackendScene({ beat }: { beat: JourneyBeat }) {
+  const rows = [
+    {
+      problem: "Accounts vanished on redeploy",
+      fix: "Put them in a real database",
+    },
+    {
+      problem: "Google sign-in forgot the profile",
+      fix: "Read the saved profile after login",
+    },
+  ];
+  return (
+    <Shell beat={beat}>
+      <Kicker>{beat.kicker}</Kicker>
+      <h1 style={{ ...rise(2), margin: 0, fontSize: 48, lineHeight: 1.05, letterSpacing: "-0.04em" }}>
+        The server forgot people.
+      </h1>
+      {rows.map((row, index) => (
+        <div key={row.problem} style={{ ...rise(10 + index * 8), marginTop: 18, background: "#fff", borderRadius: 22, padding: "18px 20px" }}>
+          <span style={{ fontSize: 16, fontWeight: 800, letterSpacing: "0.1em", color: coral }}>PROBLEM</span>
+          <b style={{ display: "block", marginTop: 6, fontSize: 28, letterSpacing: "-0.03em" }}>{row.problem}</b>
+          <span style={{ display: "block", marginTop: 12, fontSize: 16, fontWeight: 800, letterSpacing: "0.1em", color: "#1d8a3a" }}>FIX</span>
+          <span style={{ display: "block", marginTop: 4, fontSize: 26, fontWeight: 800 }}>{row.fix}</span>
+        </div>
+      ))}
     </Shell>
   );
 }
 
 function CloseScene({ beat }: { beat: JourneyBeat }) {
   const rules = [
-    "Journal stays open.",
-    "Gmail off. Dublin stayed.",
-    "Built the frame. Wrote the captions.",
+    "Mapped the move before the screens.",
+    "Pinned the phone to the visible screen.",
+    "Accounts and profiles survive a restart.",
   ];
   return (
     <AbsoluteFill style={{ background: ink, fontFamily: font, color: "#fff" }}>
@@ -483,18 +326,18 @@ function CloseScene({ beat }: { beat: JourneyBeat }) {
             key={rule}
             style={{
               ...rise(6 + index * 8),
-              margin: index === 0 ? "12px 0 0" : "18px 0 0",
-              fontSize: 40,
+              margin: index === 0 ? "8px 0 0" : "16px 0 0",
+              fontSize: 36,
               fontWeight: 800,
-              letterSpacing: "-0.035em",
+              letterSpacing: "-0.03em",
               lineHeight: 1.2,
             }}
           >
-            <span style={{ color: coral, marginRight: 16 }}>0{index + 1}</span>
+            <span style={{ color: coral, marginRight: 14 }}>0{index + 1}</span>
             {rule}
           </p>
         ))}
-        <p style={{ ...rise(36), margin: "48px 0 0", fontSize: 34, fontWeight: 800, color: sky, letterSpacing: "-0.03em" }}>
+        <p style={{ ...rise(36), margin: "40px 0 0", fontSize: 32, fontWeight: 800, color: sky, letterSpacing: "-0.03em" }}>
           Relocate smarter.
           <span style={{ display: "block" }}>Settle faster. Thrive longer.</span>
         </p>
@@ -506,9 +349,9 @@ function CloseScene({ beat }: { beat: JourneyBeat }) {
 
 function BeatScene({ beat }: { beat: JourneyBeat }) {
   if (beat.id === "welcome") return <WelcomeScene beat={beat} />;
-  if (beat.id === "login") return <LoginScene beat={beat} />;
-  if (beat.id === "profile") return <ProfileScene beat={beat} />;
+  if (beat.id === "map") return <MapScene beat={beat} />;
   if (beat.id === "layout") return <LayoutScene beat={beat} />;
+  if (beat.id === "backend") return <BackendScene beat={beat} />;
   return <CloseScene beat={beat} />;
 }
 

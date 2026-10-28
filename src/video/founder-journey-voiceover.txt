@@ -1,30 +1,33 @@
 Vibe-coder's Journey — episode 01
 Record this yourself. The picture is 70 seconds and has no voice.
-Start each block when the card changes. Say it like you're telling a friend.
+Start each block when the card changes.
 
 0:00
 Welcome to Vibe-coder's Journey.
-A series on how I built my app, and the problems I faced.
+How I mapped EXPal, the phone layout, and the backend.
 
-0:11
-First problem. The old site threw everyone onto login.
-If you can't land, you can't be found.
-I fixed that. The journal stays open.
-You make an account when you want one.
+0:08
+I mapped the product before the screens.
+A public page, no login, and a journal I can post.
+Then the move itself.
+Housing. Visa and IRP. PPS. Community. Referrals. A job tracker.
+Home, Explore, Community, Journey, Profile.
 
-0:28
-Second problem. My Gmail was on the profile.
-I took it off.
-People see Dublin, and a work permit.
-And I cut the line the real screen never had.
+0:26
+Desktop was fine. The phone wasn't.
+Job tracker popups opened off the page.
+On the phone, forms hid under the tabs, and chat covered Send.
+I pinned them to the screen you can actually see.
 
-0:45
-Third problem. I squeezed a wide video into a phone, and the menu fell off.
-I built the frame, and I wrote the captions on.
-LinkedIn is on mute.
+0:44
+Then the backend.
+Accounts disappeared every time I redeployed.
+I put them in a real database, so a restart doesn't wipe anyone.
+Google sign-in also forgot the profile.
+I read it back after login.
 
-1:01
-Three problems. Three fixes.
+1:02
+That's the map, the phone, and the server.
 Relocate smarter.
 Settle faster.
 Thrive longer.
