@@ -13,6 +13,7 @@
     "export:linkedin-ad": "node scripts/export-linkedin-ad.mjs",
     "export:youtube": "LM_WIDE=1 node scripts/export-linkedin-ad.mjs",
     "export:short": "node scripts/export-expal-short.mjs",
+    "export:journey": "node scripts/export-founder-journey.mjs",
     "remotion": "remotion studio src/video/index.ts"
   },
   "dependencies": {
