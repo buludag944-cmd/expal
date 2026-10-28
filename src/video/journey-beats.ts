@@ -36,7 +36,7 @@ export const JOURNEY_FPS = 30;
 export const JOURNEY_WIDTH = 1080;
 export const JOURNEY_HEIGHT = 1350;
 /** Cleaned recording, after the restart false starts are removed. */
-export const JOURNEY_DURATION_SEC = 140.8;
+export const JOURNEY_DURATION_SEC = 138.3;
 
 /**
  * Product screenshots only. No profile, no home greeting, no account email.
@@ -115,20 +115,20 @@ const ROWS: Array<{
   },
   { t: 90.62, id: "accounts", visual: "login", caption: "Accounts disappeared every time I redeployed." },
   { t: 93.9, id: "database", visual: "login", caption: "I put them in a real database." },
-  { t: 96.24, id: "restart", visual: "login", caption: "So a restart doesn't wipe anymore." },
-  { t: 101.64, id: "google", visual: "login", caption: "Google sign-in was the part I forgot to add." },
+  { t: 95.86, id: "restart", visual: "login", caption: "So a restart doesn't wipe anymore." },
+  { t: 99.1, id: "google", visual: "login", caption: "Google sign-in was the part I forgot to add." },
   {
-    t: 107.36,
+    t: 104.72,
     id: "firebase",
     visual: "login",
     caption: "I learned how to add Firebase.",
     captionLine2: "So people can sign in with their Google accounts.",
   },
-  { t: 120.82, id: "close", visual: "pair", caption: "That's the map, the phone, and the server." },
-  { t: 124.66, id: "continue", visual: "community", caption: "I'll continue this series." },
-  { t: 129.74, id: "idea", visual: "phone", caption: "Building an app starts with an easy idea." },
+  { t: 118.3, id: "close", visual: "pair", caption: "That's the map, the phone, and the server." },
+  { t: 121.92, id: "continue", visual: "community", caption: "I'll continue this series." },
+  { t: 127.18, id: "idea", visual: "phone", caption: "Building an app starts with an easy idea." },
   {
-    t: 134.1,
+    t: 131.56,
     id: "motto",
     visual: "hero",
     caption: "EXPal.",

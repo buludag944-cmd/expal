@@ -11,7 +11,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const FPS = 30;
-const DURATION_SEC = 140.8;
+const DURATION_SEC = 138.3;
 const WIDTH = 1080;
 const HEIGHT = 1350;
 

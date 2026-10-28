@@ -15,8 +15,8 @@ describe("EXPal founder journey beats", () => {
     expect(JOURNEY_FPS).toBe(30);
     expect(JOURNEY_WIDTH).toBe(1080);
     expect(JOURNEY_HEIGHT).toBe(1350);
-    expect(JOURNEY_DURATION_IN_FRAMES).toBe(4_224);
-    expect(JOURNEY_DURATION_MS).toBe(140_800);
+    expect(JOURNEY_DURATION_IN_FRAMES).toBe(4_149);
+    expect(JOURNEY_DURATION_MS).toBe(138_300);
   });
 
   it("fills the timeline without gaps", () => {
