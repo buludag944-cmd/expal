@@ -7,6 +7,7 @@ export type JourneyBeat = {
   kicker: string;
   caption: string;
   captionLine2: string;
+  /** Spoken script for Bahar to record. The picture cut is silent. */
   voice: string;
 };
 
@@ -15,70 +16,64 @@ export const JOURNEY_FPS = 30;
 export const JOURNEY_WIDTH = 1080;
 export const JOURNEY_HEIGHT = 1350;
 
-/** ~1s of air before the first sentence of each beat. */
-export const TTS_LEAD_IN_MS = 1_000;
-/** Pause between sentences inside a beat (0.4–0.7s). */
-export const TTS_BETWEEN_SENTENCES_MS = 550;
-
 export const JOURNEY_BEATS: JourneyBeat[] = [
   {
     id: "hook",
     from: 0,
-    durationInFrames: 270,
+    durationInFrames: 210,
     kicker: "Founder's & builder's journey",
-    caption: "Three bugs I hit while building EXPal.",
-    captionLine2: "And the map I wrote first.",
-    voice: "Three bugs I hit while building EXPal. And the map I wrote first.",
+    caption: "I didn't start with “build my app.”",
+    captionLine2: "I mapped it first.",
+    voice: "I didn't start EXPal by saying build my app. I mapped it first.",
   },
   {
     id: "map",
-    from: 270,
-    durationInFrames: 690,
+    from: 210,
+    durationInFrames: 480,
     kicker: "Map the product first",
-    caption: "Map the front door before the features.",
-    captionLine2: "Public page. Journal. Then Google sign-in.",
+    caption: "No login. A journal I can post.",
+    captionLine2: "Then Google sign-in. Then the move.",
     voice:
-      "Map the front door before the features. A public page, no login, and a journal I can post. Then the same Google sign-in as the app. Housing, PPS, IRP, community, and referrals.",
+      "A page you can open without logging in. A journal I can post. Sign-in is the same Google account as the app. Then the move itself: housing, PPS, IRP, community, referrals.",
   },
   {
     id: "login",
-    from: 960,
-    durationInFrames: 510,
+    from: 690,
+    durationInFrames: 390,
     kicker: "Bug 01 · The door",
-    caption: "Don't hide that page behind a login wall.",
-    captionLine2: "Public journal. Account only when someone asks.",
+    caption: "The old site threw everyone onto login.",
+    captionLine2: "The journal stays open.",
     voice:
-      "Don't hide that page behind a login wall. Strangers can't land, and search can't see it. Keep the journal public, and open an account only when someone asks.",
+      "The old site threw everyone onto login. Nothing to land on, nothing to find. The journal stays open. Account only when you want one.",
   },
   {
     id: "profile",
-    from: 1_470,
-    durationInFrames: 480,
+    from: 1_080,
+    durationInFrames: 420,
     kicker: "Bug 02 · The profile",
-    caption: "Don't put Gmail on the public profile.",
-    captionLine2: "Dublin and a work permit. Not an inbox.",
+    caption: "My Gmail was on the public profile.",
+    captionLine2: "Dublin, and a work permit.",
     voice:
-      "Don't put a Gmail address on the public profile. Dublin and a work permit are the identity. And don't add a sentence the real screen never had.",
+      "My Gmail was on the public profile. That's not a name. Dublin, and a work permit. I cut the line the real screen never had.",
   },
   {
     id: "layout",
-    from: 1_950,
-    durationInFrames: 540,
+    from: 1_500,
+    durationInFrames: 360,
     kicker: "Bug 03 · The frame",
-    caption: "Don't crop a wide recording into a phone.",
-    captionLine2: "Design the frame. Burn the captions.",
+    caption: "I squeezed a wide video into a phone.",
+    captionLine2: "Build the frame. Write the captions.",
     voice:
-      "Don't crop a wide recording into a phone. The navigation fell off, and a stray word stayed in frame. Design the frame, burn the captions, because LinkedIn starts muted.",
+      "I squeezed a wide video into a phone. The menu fell off. Build the frame. Write the captions. LinkedIn is on mute.",
   },
   {
     id: "close",
-    from: 2_490,
-    durationInFrames: 420,
+    from: 1_860,
+    durationInFrames: 240,
     kicker: "What I would not repeat",
-    caption: "Map it. Then fix what the screen shows.",
+    caption: "Map it. Then fix what you can see.",
     captionLine2: "Relocate smarter. Settle faster. Thrive longer.",
-    voice:
-      "Map it. Then fix what the screen shows. Relocate smarter, settle faster, and thrive longer.",
+    voice: "Map it. Then fix what you can actually see. Relocate smarter. Settle faster. Thrive longer.",
   },
 ];
 

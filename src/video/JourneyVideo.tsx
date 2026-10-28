@@ -414,8 +414,8 @@ function HookScene({ beat }: { beat: JourneyBeat }) {
             opacity: rule,
           }}
         >
-          Vibe-coding shipped the screens.
-          <span style={{ display: "block" }}>The bugs taught the product.</span>
+          I mapped it first.
+          <span style={{ display: "block" }}>Then the bugs showed up.</span>
         </p>
       </div>
       <Caption beat={beat} />
