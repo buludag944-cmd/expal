@@ -16,12 +16,11 @@ const WIDTH = 1080;
 const HEIGHT = 1350;
 
 const STILLS = [
-  ["hook", 80],
-  ["map", 400],
-  ["login", 860],
-  ["profile", 1_260],
-  ["layout", 1_660],
-  ["close", 1_980],
+  ["welcome", 90],
+  ["login", 560],
+  ["profile", 1_080],
+  ["layout", 1_560],
+  ["close", 1_960],
 ];
 
 const OUT_DIR = process.env.JOURNEY_OUT_DIR || "/tmp/expal-journey";

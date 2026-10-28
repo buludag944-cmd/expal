@@ -1,39 +1,30 @@
-EXPal — founder's & builder's journey, episode 01
-Record this yourself. The picture cut is 70 seconds and has no voice.
-Start each block when the card changes. Speak like you're telling a friend. Leave the spare seconds. Don't rush the last line.
+Vibe-coder's Journey — episode 01
+Record this yourself. The picture is 70 seconds and has no voice.
+Start each block when the card changes. Say it like you're telling a friend.
 
 0:00
-I didn't start EXPal by saying build my app.
-I mapped it first.
+Welcome to Vibe-coder's Journey.
+A series on how I built my app, and the problems I faced.
 
-0:07
-A page you can open without logging in.
-A journal I can post.
-Sign-in is the same Google account as the app.
-Then the move itself: housing, PPS, IRP, community, referrals.
+0:11
+First problem. The old site threw everyone onto login.
+If you can't land, you can't be found.
+I fixed that. The journal stays open.
+You make an account when you want one.
 
-0:23
-The old site threw everyone onto login.
-Nothing to land on, nothing to find.
-The journal stays open.
-Account only when you want one.
+0:28
+Second problem. My Gmail was on the profile.
+I took it off.
+People see Dublin, and a work permit.
+And I cut the line the real screen never had.
 
-0:36
-My Gmail was on the public profile.
-That's not a name.
-Dublin, and a work permit.
-I cut the line the real screen never had.
-
-0:50
-I squeezed a wide video into a phone.
-The menu fell off.
-Build the frame.
-Write the captions.
+0:45
+Third problem. I squeezed a wide video into a phone, and the menu fell off.
+I built the frame, and I wrote the captions on.
 LinkedIn is on mute.
 
-1:02
-Map it.
-Then fix what you can actually see.
+1:01
+Three problems. Three fixes.
 Relocate smarter.
 Settle faster.
 Thrive longer.

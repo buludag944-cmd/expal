@@ -96,7 +96,7 @@ npm run export:story
 
 ## Founder's journey, episode 01 (LinkedIn 4:5)
 
-A separate 70-second lesson, `FounderNotes`, on how the product was mapped and which bugs not to repeat: the login wall, Gmail on the public profile, and squeezing a wide recording into a phone. The picture cut is silent. Bahar records the script in `src/video/founder-journey-voiceover.txt`. It does not overwrite the short, the ads, or the personal story.
+A separate 70-second lesson, `FounderNotes`. It opens “Welcome to Vibe-coder's Journey,” then three problems and the fix for each: the login wall, Gmail on the public profile, and a wide video squeezed into a phone. The picture cut is silent. Bahar records `src/video/founder-journey-voiceover.txt`. It does not overwrite the short, the ads, or the personal story.
 
 ```bash
 npm run export:journey

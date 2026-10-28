@@ -30,14 +30,13 @@ function SeriesMark({ light = false }: { light?: boolean }) {
         justifyContent: "space-between",
         alignItems: "center",
         fontFamily: font,
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: 700,
-        letterSpacing: "0.14em",
-        textTransform: "uppercase",
-        color: light ? "rgba(255,255,255,0.86)" : coral,
+        letterSpacing: "0.04em",
+        color: light ? "rgba(255,255,255,0.92)" : coral,
       }}
     >
-      <span>Founder & builder</span>
+      <span>Vibe-coder's Journey</span>
       <span>01</span>
     </div>
   );
@@ -117,75 +116,6 @@ function Shell({
       </div>
       <Caption beat={beat} onDark={onDark} />
     </AbsoluteFill>
-  );
-}
-
-function MapRow({
-  n,
-  title,
-  detail,
-  delay,
-}: {
-  n: string;
-  title: string;
-  detail: string;
-  delay: number;
-}) {
-  return (
-    <div
-      style={{
-        ...rise(delay),
-        display: "flex",
-        gap: 22,
-        alignItems: "center",
-        background: "#fff",
-        borderRadius: 22,
-        padding: "18px 22px",
-        marginTop: 14,
-        boxShadow: "0 8px 24px rgba(26,18,16,0.05)",
-      }}
-    >
-      <span
-        style={{
-          width: 56,
-          height: 56,
-          borderRadius: 16,
-          background: coral,
-          color: "#fff",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontWeight: 800,
-          fontSize: 24,
-          flexShrink: 0,
-        }}
-      >
-        {n}
-      </span>
-      <span>
-        <b style={{ display: "block", fontSize: 32, letterSpacing: "-0.03em" }}>{title}</b>
-        <span style={{ display: "block", marginTop: 2, fontSize: 24, color: mute }}>{detail}</span>
-      </span>
-    </div>
-  );
-}
-
-function Chip({ label, delay }: { label: string; delay: number }) {
-  return (
-    <span
-      style={{
-        ...rise(delay),
-        padding: "10px 16px",
-        borderRadius: 999,
-        background: "#fff",
-        border: `2px solid ${ink}`,
-        fontSize: 22,
-        fontWeight: 800,
-        letterSpacing: "-0.02em",
-      }}
-    >
-      {label}
-    </span>
   );
 }
 
@@ -277,7 +207,7 @@ function MiniPhone({
           marginBottom: 12,
         }}
       >
-        {clipped ? "CROPPED" : "DESIGNED"}
+        {clipped ? "PROBLEM" : "FIXED"}
       </div>
       <div
         style={{
@@ -386,63 +316,40 @@ function MiniPhone({
   );
 }
 
-function HookScene({ beat }: { beat: JourneyBeat }) {
-  const frame = useCurrentFrame();
-  const rule = interpolate(frame, [18, 36], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
+function WelcomeScene({ beat }: { beat: JourneyBeat }) {
+  const problems = ["01  Login wall", "02  Gmail on the profile", "03  The phone frame"];
   return (
     <AbsoluteFill style={{ background: coral, fontFamily: font, color: "#fff" }}>
       <div style={{ padding: "56px 64px 0" }}>
         <SeriesMark light />
-        <p style={{ ...rise(4), margin: "72px 0 0", fontSize: 30, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
-          While building EXPal
+        <p style={{ ...rise(4), margin: "64px 0 0", fontSize: 28, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" }}>
+          Episode 01
         </p>
-        <h1 style={{ ...rise(8), margin: "18px 0 0", fontSize: 108, lineHeight: 0.95, letterSpacing: "-0.05em", fontWeight: 800 }}>
-          3 bugs.
-          <span style={{ display: "block" }}>1 map.</span>
+        <h1 style={{ ...rise(8), margin: "16px 0 0", fontSize: 92, lineHeight: 0.96, letterSpacing: "-0.045em", fontWeight: 800 }}>
+          Welcome.
         </h1>
-        <p
-          style={{
-            ...rise(20),
-            marginTop: 36,
-            maxWidth: 820,
-            fontSize: 40,
-            lineHeight: 1.25,
-            fontWeight: 700,
-            opacity: rule,
-          }}
-        >
-          I mapped it first.
-          <span style={{ display: "block" }}>Then the bugs showed up.</span>
+        <p style={{ ...rise(16), margin: "28px 0 0", maxWidth: 860, fontSize: 40, lineHeight: 1.25, fontWeight: 700 }}>
+          A series on how I built my app, and the problems I faced.
         </p>
+        <div style={{ marginTop: 36 }}>
+          {problems.map((problem, index) => (
+            <p
+              key={problem}
+              style={{
+                ...rise(24 + index * 6),
+                margin: index === 0 ? 0 : "14px 0 0",
+                fontSize: 32,
+                fontWeight: 800,
+                letterSpacing: "-0.03em",
+              }}
+            >
+              {problem}
+            </p>
+          ))}
+        </div>
       </div>
       <Caption beat={beat} />
     </AbsoluteFill>
-  );
-}
-
-function MapScene({ beat }: { beat: JourneyBeat }) {
-  return (
-    <Shell beat={beat}>
-      <Kicker>{beat.kicker}</Kicker>
-      <h1 style={{ ...rise(2), margin: 0, fontSize: 64, lineHeight: 1.02, letterSpacing: "-0.045em" }}>
-        Write the door
-        <span style={{ display: "block" }}>before the features.</span>
-      </h1>
-      <MapRow n="01" title="Public page" detail="People land without logging in" delay={8} />
-      <MapRow n="02" title="A journal I can post" detail="Guides for the move. Built for search." delay={16} />
-      <MapRow n="03" title="Same Google sign-in" detail="Account only after the front door works" delay={24} />
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 22 }}>
-        {["Housing", "PPS", "IRP", "Community", "Referrals"].map((label, index) => (
-          <Chip key={label} label={label} delay={36 + index * 4} />
-        ))}
-      </div>
-      <p style={{ ...rise(58), margin: "18px 0 0", fontSize: 24, color: mute, fontWeight: 700 }}>
-        Home · Explore · Community · Journey · Profile
-      </p>
-    </Shell>
   );
 }
 
@@ -450,27 +357,27 @@ function LoginScene({ beat }: { beat: JourneyBeat }) {
   return (
     <Shell beat={beat}>
       <Kicker>{beat.kicker}</Kicker>
-      <h1 style={{ ...rise(2), margin: 0, fontSize: 58, lineHeight: 1.05, letterSpacing: "-0.045em" }}>
-        A login wall is not a landing page.
+      <h1 style={{ ...rise(2), margin: 0, fontSize: 54, lineHeight: 1.05, letterSpacing: "-0.045em" }}>
+        Everyone landed on login.
       </h1>
       <div style={{ display: "flex", gap: 18, marginTop: 28 }}>
         <GateCard
           tone="before"
-          label="BEFORE"
+          label="PROBLEM"
           title="Sign in to continue"
-          lines={["The live site opened on login.", "Strangers never saw the journal."]}
+          lines={["The old site opened on login.", "Nothing to land on."]}
           delay={10}
         />
         <GateCard
           tone="after"
-          label="AFTER"
-          title="EXPal journal"
-          lines={["Guides for life abroad.", "No login required."]}
+          label="FIX"
+          title="Journal stays open"
+          lines={["You can read it straight away.", "Account only when you want one."]}
           delay={18}
         />
       </div>
       <p style={{ ...rise(30), margin: "26px 0 0", fontSize: 28, fontWeight: 700, lineHeight: 1.35 }}>
-        Search can't rank a door it isn't allowed to open.
+        I fixed that. If you can't land, you can't be found.
       </p>
     </Shell>
   );
@@ -480,8 +387,8 @@ function ProfileScene({ beat }: { beat: JourneyBeat }) {
   return (
     <Shell beat={beat}>
       <Kicker>{beat.kicker}</Kicker>
-      <h1 style={{ ...rise(2), margin: 0, fontSize: 56, lineHeight: 1.05, letterSpacing: "-0.045em" }}>
-        Your inbox is not your public name.
+      <h1 style={{ ...rise(2), margin: 0, fontSize: 52, lineHeight: 1.05, letterSpacing: "-0.045em" }}>
+        Gmail was sitting on the profile.
       </h1>
       <div
         style={{
@@ -535,11 +442,11 @@ function ProfileScene({ beat }: { beat: JourneyBeat }) {
           <span style={{ color: coral, fontSize: 18, fontWeight: 800, letterSpacing: "0.08em" }}>REMOVED</span>
         </div>
         <p style={{ margin: "14px 0 0", fontSize: 24, color: mute, fontWeight: 700 }}>
-          Taken off the public profile. City and permit stayed.
+          The fix: I took the email off. Dublin and a work permit stayed.
         </p>
       </div>
       <p style={{ ...rise(28), margin: "22px 0 0", fontSize: 28, fontWeight: 800, lineHeight: 1.35 }}>
-        Don't add a sentence the real Edit profile screen never had.
+        I also cut the line the real screen never had.
       </p>
     </Shell>
   );
@@ -549,8 +456,8 @@ function LayoutScene({ beat }: { beat: JourneyBeat }) {
   return (
     <Shell beat={beat}>
       <Kicker>{beat.kicker}</Kicker>
-      <h1 style={{ ...rise(2), margin: "0 0 8px", fontSize: 50, lineHeight: 1.05, letterSpacing: "-0.045em" }}>
-        The frame is part of the product.
+      <h1 style={{ ...rise(2), margin: "0 0 8px", fontSize: 48, lineHeight: 1.05, letterSpacing: "-0.045em" }}>
+        The menu fell off the phone.
       </h1>
       <div style={{ display: "flex", justifyContent: "space-between", marginTop: 12 }}>
         <MiniPhone clipped delay={8} />
@@ -562,9 +469,9 @@ function LayoutScene({ beat }: { beat: JourneyBeat }) {
 
 function CloseScene({ beat }: { beat: JourneyBeat }) {
   const rules = [
-    "Map the door before the features.",
-    "Keep an email off the public profile.",
-    "Design the frame. Burn the captions.",
+    "Journal stays open.",
+    "Gmail off. Dublin stayed.",
+    "Built the frame. Wrote the captions.",
   ];
   return (
     <AbsoluteFill style={{ background: ink, fontFamily: font, color: "#fff" }}>
@@ -598,8 +505,7 @@ function CloseScene({ beat }: { beat: JourneyBeat }) {
 }
 
 function BeatScene({ beat }: { beat: JourneyBeat }) {
-  if (beat.id === "hook") return <HookScene beat={beat} />;
-  if (beat.id === "map") return <MapScene beat={beat} />;
+  if (beat.id === "welcome") return <WelcomeScene beat={beat} />;
   if (beat.id === "login") return <LoginScene beat={beat} />;
   if (beat.id === "profile") return <ProfileScene beat={beat} />;
   if (beat.id === "layout") return <LayoutScene beat={beat} />;

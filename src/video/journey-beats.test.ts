@@ -20,14 +20,9 @@ describe("EXPal founder journey beats", () => {
   });
 
   it("splits the spoken script on sentence boundaries", () => {
-    expect(
-      splitVoiceSentences(
-        "My Gmail was on the public profile. That's not a name. Dublin, and a work permit.",
-      ),
-    ).toEqual([
-      "My Gmail was on the public profile.",
-      "That's not a name.",
-      "Dublin, and a work permit.",
+    expect(splitVoiceSentences("First problem. The journal stays open.")).toEqual([
+      "First problem.",
+      "The journal stays open.",
     ]);
   });
 
@@ -42,30 +37,31 @@ describe("EXPal founder journey beats", () => {
     }
   });
 
-  it("teaches the map, then the three bugs, then the motto", () => {
+  it("opens the series, then three problems with a fix, then the motto", () => {
     expect(JOURNEY_BEATS.map((beat) => beat.id)).toEqual([
-      "hook",
-      "map",
+      "welcome",
       "login",
       "profile",
       "layout",
       "close",
     ]);
-    expect(journeyBeatAtFrame(0).captionLine2).toMatch(/mapped it first/);
-    expect(journeyBeatAtFrame(300).caption).toMatch(/journal/);
-    expect(journeyBeatAtFrame(800).caption).toMatch(/login/);
-    expect(journeyBeatAtFrame(1_200).caption).toMatch(/Gmail/);
-    expect(journeyBeatAtFrame(1_600).caption).toMatch(/phone/);
+    expect(journeyBeatAtFrame(0).voice).toMatch(/Welcome to Vibe-coder's Journey/);
+    expect(journeyBeatAtFrame(400).voice).toMatch(/First problem/);
+    expect(journeyBeatAtFrame(400).captionLine2).toMatch(/journal stays open/);
+    expect(journeyBeatAtFrame(1_000).voice).toMatch(/Second problem/);
+    expect(journeyBeatAtFrame(1_000).captionLine2).toMatch(/work permit/);
+    expect(journeyBeatAtFrame(1_500).voice).toMatch(/Third problem/);
+    expect(journeyBeatAtFrame(1_500).captionLine2).toMatch(/captions/);
     expect(JOURNEY_BEATS.at(-1)?.captionLine2).toMatch(/Thrive longer/);
-    expect(JOURNEY_BEATS.at(-1)?.voice).toMatch(/Relocate smarter\. Settle faster\. Thrive longer/);
+    expect(JOURNEY_BEATS.at(-1)?.voice).toMatch(/Three problems\. Three fixes/);
   });
 
   it("keeps a real email address and the retired tagline out of the script", () => {
     const blob = JSON.stringify(JOURNEY_BEATS);
     expect(blob).not.toMatch(/uludag944|@gmail\.com/i);
     expect(blob).not.toMatch(/Move\. Settle\. Connect/);
-    expect(blob).toMatch(/without logging in/);
-    expect(blob).toMatch(/housing, PPS, IRP, community, referrals/);
+    expect(blob).toMatch(/problems I faced/);
+    expect(blob).toMatch(/I took it off/);
     expect(blob).toMatch(/real screen never had/);
     expect(blob).toMatch(/LinkedIn is on mute/);
   });
